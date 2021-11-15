@@ -11,7 +11,6 @@ function App() {
         <Route exact path={'/vote'} component={Vote}></Route>
         <Route exact path={'/create'} component={Create}></Route>
         <Route path={'/'} component={Home}></Route>
-
       </Switch>
     </Router>
   );
