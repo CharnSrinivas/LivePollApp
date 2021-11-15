@@ -1,0 +1,12 @@
+{
+  "name": "livepollapp",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev-server": "nodemon server/index.ts",
+    "dev-view": "cd view && npm start"
+  },
+  "author": "",
+  "license": "ISC"
+}

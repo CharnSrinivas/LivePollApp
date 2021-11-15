@@ -1,0 +1,9 @@
+.buttons-stack{
+
+    align-items: center ;
+}
+.buttons-stack button{
+    width: 50%;
+    font-weight: bold;
+    font-size: 100%;
+}
