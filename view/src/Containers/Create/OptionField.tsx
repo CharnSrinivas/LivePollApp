@@ -29,11 +29,12 @@ const OptionField =
                     value={opt}
                     onChange={(e) => _onChange(e, i)} label={`option-${i + 1}`} sx={{ width: '100%', margin: 'auto 1rem' }}
                     spellCheck
+                    id={`poll-option-${i+1}`}
                     helperText={'Option should not be empty.'}
                 />
                 <IconButton
                     id={`more-btn${i + 1}`}
-                    onClick={() => { { setOpen(true) } }}
+                    onClick={() => {  setOpen(true) } }
                 >
                     <MoreVert />
                 </IconButton>

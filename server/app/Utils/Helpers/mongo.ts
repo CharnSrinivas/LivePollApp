@@ -1,5 +1,5 @@
 import { MongoClient, Db, InsertOneResult, UpdateResult } from 'mongodb';
-import { DbQuestion, Question as QuestionInterface, Option } from '../models/db_models';
+import { DbQuestion, Question as QuestionInterface, Option, DbVote } from '../models/db_models';
 const DB_Name = 'LivePollApp';
 const url = 'mongodb://127.0.0.1:27017'
 // 'mongodb+srv://charan:admin@cluster.mnp3q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
@@ -49,7 +49,7 @@ class MongoHelper {
                 options.push({ no_of_polls: 0, option: opt, index });
             })
 
-            let _question: DbQuestion = { created_time: question.created_time, options, question: question.question, question_id: question.question_id };
+            let _question: DbQuestion = { created_time: question.created_time, options, question: question.question, question_id: question.question_id, votes: [] };
 
             this.db?.collection(LivePollsCollectionName).insertOne(_question).then((doc) => {
                 resolve(doc);
@@ -57,16 +57,17 @@ class MongoHelper {
         })
     }
 
-    public voteToQuestion(question_id: string, opt_index: number): Promise<UpdateResult> {
+    public voteToQuestion(question_id: string, opt_index: number, req_ip_addr: string,): Promise<UpdateResult> {
         return new Promise((res, rej) => {
             if (!this.db) {
                 console.error('updatePoll db is undefined')
-                rej('db is undefined');
+                rej();
             }
             let collection = this.db!.collection(LivePollsCollectionName);
+            let vote: DbVote = { created_time: new Date(), ip_addr: req_ip_addr, name: 'temp name', option_index: opt_index }
             collection.findOne({ 'question_id': question_id }).then(db_question => {
                 if (!db_question) {
-                    rej('\n \t\t ++++++++++++++ Invalid question Id. ++++++++++')
+                    rej('Invalid poll id!')
                 };
                 collection.updateOne(
                     {
@@ -75,13 +76,24 @@ class MongoHelper {
                     }, {
                     $inc: {
                         'options.$.no_of_polls': 1
+                    }, $addToSet: {
+                        'votes': vote
                     }
                 }
-                ).then(result => { res(result) }).catch(err=>rej(err))
+                ).then(result => { res(result) }).catch(err => rej())
             })
         })
     }
-
+    public isVotedToPoll = (question_id:string,ip_addr:string): Promise<boolean> => {
+        return new Promise((res, rej) => {
+            this.db!.collection('LivePolls').find({ "question_id": question_id,"votes.ip_addr":ip_addr }).project({ votes: 0, _id: 0 }).toArray().then(data => {
+                if(!data){res(false);return;}
+                if (data.length > 0) {
+                    res(true);return;
+                }res(false);
+            }).catch(err=>rej(err))
+        })
+    }
     public fetchAllQuestionData() {
         return new Promise((res, rej) => {
             if (!this.db) {
@@ -100,7 +112,7 @@ class MongoHelper {
             }
             this.db!.collection(LivePollsCollectionName).findOne({ 'question_id': question_id }, function (err, doc) {
                 if (err) rej(err);
-                if (!doc){rej('Invalid question id!')}
+                if (!doc) { rej('Invalid question id!') }
                 res(doc)
             })
         })
