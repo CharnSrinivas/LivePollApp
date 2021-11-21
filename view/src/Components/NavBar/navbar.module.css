@@ -1,0 +1,104 @@
+.links-container {
+    color: var(--primary);
+    font-size: 1.15rem;
+    font-weight: normal;
+    letter-spacing: 1.2px;
+}
+
+.links-container p {
+    padding: 0.2rem 0.2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.links-container p::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2.5px;
+    transform: scaleX(0);
+    bottom: 0;
+    left: 0;
+    border-radius: 12px;
+    background-color: var(--primary);
+    transform-origin: right;
+    transition: transform 0.25s ease-out;
+
+}
+
+
+
+.menu {
+    width: 5vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    display: none;
+}
+
+.menu div {
+    width: 100%;
+    height: 3px;
+    margin: 0.1rem auto;
+    background-color: var(--font-color);
+    transform-origin: right;
+}
+
+.menu :nth-child(1) {
+    transform: scaleX(0.45);
+}
+
+.menu :nth-child(2) {
+    transform: scaleX(0.75);
+}
+
+.links-container-open {
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+@media screen and (max-width:780px) {
+    .menu {
+        display: flex;
+    }
+    
+    .links-container {
+        width: 100%;
+        position: absolute;
+        top: 55px;
+        padding-top: 25px;
+        padding-bottom: 25px;
+        left: 0;
+        background: hsla(280, 100%, 95%, 0.6);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.73);
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        transform: scaleX(1);
+        transform-origin: left;
+        opacity: 0;
+    }
+
+    @supports(backdrop-filter:blur(4.7px)) {
+        .links-container {
+            background: hsla(0, 0%, 100%, 0.6) !important;
+            backdrop-filter: blur(4.7px);
+            -webkit-backdrop-filter: blur(4.7px);
+        }
+    }
+
+    .links-container p, .links-container button {
+        margin-left: 1rem !important;
+        font-weight: bold;
+    }
+
+    
+
+    .links-container>span {
+        background-color: hsla(0, 0%, 60%, 0.5);
+        width: 100%;
+        height: 1.2px;
+    }
+
+}

@@ -1,7 +1,7 @@
 import { MoreVert, DeleteOutlined } from "@mui/icons-material";
-import { Stack, TextField, IconButton, Popover, List, ListSubheader, ListItem,ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Stack, TextField, IconButton, Popover, List, ListSubheader, ListItem, ListItemButton, ListItemIcon, ListItemText, InputAdornment } from "@mui/material";
 import React from "react";
-
+import styles from './create.module.css';
 const OptionField =
     ({ opt, i, onChange, onDelete }: { opt: string, i: number, onChange?: Function, onDelete?: Function }) => {
         const [open, setOpen] = React.useState(false);
@@ -13,9 +13,7 @@ const OptionField =
         const _onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, index: number) => {
             let length = e.target.value.length;
             if ((length <= 0 && e.target.value === ' '.repeat(length))) {
-
                 setempty(true);
-
             }
             else { setempty(false) }
             if (onChange) { onChange(e.target.value); };
@@ -23,18 +21,27 @@ const OptionField =
         let anchorEl = document.getElementById(`more-btn${i + 1}`);
         return (
             <Stack direction={'row'} alignItems={'baseline'} justifyContent={'space-between'}>
-                <p style={{ fontSize: '1.2rem', color: 'hsl(0,0%,35%)' }}>{i + 1}.</p>
                 <TextField
                     error={empty}
                     value={opt}
-                    onChange={(e) => _onChange(e, i)} label={`option-${i + 1}`} sx={{ width: '100%', margin: 'auto 1rem' }}
+                    onChange={(e) => _onChange(e, i)} label={`option-${i + 1}`}
                     spellCheck
-                    id={`poll-option-${i+1}`}
+                    sx={{ width: '100%' }}
+                    placeholder={`Select your option-${i + 1}`}
+                    id={`poll-option-${i + 1}`}
                     helperText={'Option should not be empty.'}
+
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start" >
+                                <div className={styles['option-number']}><p>{i + 1}</p></div>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
                 <IconButton
                     id={`more-btn${i + 1}`}
-                    onClick={() => {  setOpen(true) } }
+                    onClick={() => { setOpen(true) }}
                 >
                     <MoreVert />
                 </IconButton>
@@ -54,16 +61,16 @@ const OptionField =
                         subheader={
                             <ListSubheader>More</ListSubheader>
                         }
-                    >   
-                    <ListItem>
-                        
-                    </ListItem>
+                    >
+                        <ListItem>
+
+                        </ListItem>
                         <ListItemButton onClick={() => { setOpen(false); if (onDelete) { onDelete() } }}>
 
                             <ListItemIcon>
                                 <DeleteOutlined color='warning' />
                             </ListItemIcon>
-                            <ListItemText primary="Delete"  />
+                            <ListItemText primary="Delete" />
                         </ListItemButton>
                     </List>
                 </Popover>

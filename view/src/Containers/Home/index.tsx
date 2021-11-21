@@ -1,7 +1,9 @@
 import React from 'react';
-import { SERVER_URL } from '../../config';
-import { Box, Button, Stack, Dialog,  TextField, Paper } from '@mui/material'
+import { Button, Stack, Dialog, TextField, Typography } from '@mui/material'
+import NavBar from '../../Components/NavBar'
 import { getQuestionData, savePollId } from '../../Utils/utils';
+import styles from './home.module.css';
+import './home.css'
 interface StateProps {
     show_join_poll_popup: boolean,
     invalid_poll_id: boolean,
@@ -38,23 +40,78 @@ export default class Home extends React.Component<{}, StateProps> {
             })
         })
     }
+    componentDidMount() {
 
+        const container = document.getElementById('top-right-container');
+        if (container) {
+            fetch('media/charts_illustration.svg').then(res => {
+                res.text().then(svg => {
+                    container.innerHTML += svg;
+                })
+            })
+        }
+    }
     render(): React.ReactNode {
 
         return (
-            <Paper
-                variant='elevation'
-                elevation={0}
-                sx={{ p: '1.5rem' }}
-            // sx={{position:'absolute', top: 0, left: 0, right: 0, bottom: 0 }} 
-            >
-                <Box
-                    maxWidth='sm' sx={{ margin: '3rem auto auto auto', p: '1rem', borderRadius: '3px' }} boxShadow={2}
+            <div >
+                <NavBar />
+
+                <div
+                    className={styles['container']}
                 >
-                    <Stack direction='column' spacing={4} sx={{ margin: '3rem auto', alignItems: 'center' }}>
-                        <Button size='medium' variant='contained' onClick={this.toggleJoinPopup}>Join</Button>
-                        <Button href='/create' size='medium' variant='text'>Create</Button>
-                    </Stack>
+                    <div className={styles['top']}>
+                        <Stack
+                            className={styles['action-btns-container']}
+                            direction='row'
+                            alignItems={'center'}
+                            spacing={2}>
+                            <Stack className={styles['create-container']} spacing={2}>
+                                <img alt='create' loading='lazy' src='media/create.png'></img>
+                                <p id='some'>
+                                    Create <b style={{ color: 'var(--primary)', letterSpacing: '1px', fontSize: 'inherit' }}>Live Polls</b> in no time.
+                                </p>
+                                <p>Simple and fast.</p>
+                                <Button href='create' size='large' variant='contained' sx={{ textTransform: 'none', fontWeight: 'bold' }} >Create</Button>
+                            </Stack>
+                            <i color='primary'>OR</i>
+                            <Stack className={styles['join-container']} spacing={2}>
+                                <img loading='lazy' alt='vote' src='media/vote.png'></img>
+                                <p >Vote to existing poll(s) created by others.</p>
+                                <p>By entering poll id.</p>
+                                <Button size='medium' variant='contained' sx={{ textTransform: 'none', fontWeight: 'bold' }} >Join</Button>
+                            </Stack>
+                        </Stack>
+                        {window.innerWidth > 980 &&
+                            <div className={styles['top-right-image']} id='top-right-container'></div>
+                        }
+
+                    </div>
+                    <div className={styles['bottom']}>
+                        <Stack direction={'column'} alignItems={'center'}>
+                            <Typography variant='h4' sx={{ color: 'var(--font-color)' }}>Features</Typography>
+                            <Stack direction={'row'} className={styles['features-container']} alignItems={'center'} justifyContent={'center'}>
+                                <div>
+                                    <img src='media/free.png' alt='free' loading='lazy'></img>
+                                    <Typography variant='h5' color={'var(--font-color)'}>Free</Typography>
+                                    <span></span>
+                                    <p>Save money! All our polls are 100% free to create and monitor.</p>
+                                </div>
+                                <div>
+                                    <img src='media/clock.png' alt='clock' loading='lazy'></img>
+                                    <Typography variant='h5' color={'var(--font-color)'}>Real Time</Typography>
+                                    <span></span>
+                                    <p>All our polls are live and up to date. You can monitor your live polls with our any refreshing.</p>
+                                </div>
+                                <div>
+                                    <img src='media/shield.png' alt='shield' loading='lazy'></img>
+                                    <Typography variant='h5' color={'var(--font-color)'}>Safe & Secure</Typography>
+                                    <span></span>
+                                    <p>We use latest technology to prevent any type of malicious things.We also prevent duplicate votes.</p>
+                                </div>
+                            </Stack>
+                        </Stack>
+                    </div>
                     {this.state.show_join_poll_popup &&
 
                         <Dialog open maxWidth='md' onClose={this.toggleJoinPopup}>
@@ -69,15 +126,15 @@ export default class Home extends React.Component<{}, StateProps> {
                                         id='join-id-input'
                                         autoFocus
                                         variant='standard'
-                                        onKeyDown={(e) => { if (e.keyCode === 13 || e.key === 'Enter') { this.joinPoll() }}} />
-                                    <Button size='medium' variant='contained' onClick={this.joinPoll}>Join</Button>
+                                        onKeyDown={(e) => { if (e.keyCode === 13 || e.key === 'Enter') { this.joinPoll() } }} />
+                                    <Button size='large' variant='contained' onClick={this.joinPoll}>Join</Button>
                                 </Stack>
                             </Stack>
 
                         </Dialog>
                     }
-                </Box>
-            </Paper>
+                </div>
+            </div>
         )
     };
 }

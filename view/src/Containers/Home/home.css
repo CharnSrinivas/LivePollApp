@@ -1,0 +1,17 @@
+#head{
+    animation: head-animation 3s linear 0s infinite  ;
+}
+@keyframes head-animation{
+    0%{
+        transform: translateY(0);
+    }
+    25%{
+        transform: translateY(3px);
+    }
+    50%{
+        transform: translateY(0px);
+    }
+    75%{
+        transform: translateY(-3px);
+    }
+}

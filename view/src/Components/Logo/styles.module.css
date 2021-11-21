@@ -1,0 +1,45 @@
+.logo{
+    width:2rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: var(--primary);
+    border-radius: 50%;
+}
+.container{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: baseline;
+    margin-top: 0.2rem;
+    width: 60%;
+    height: 100%;
+}
+.container div{
+    transform-origin: bottom;
+    width:0.2rem;
+    height: 0.6rem;
+    background-color: white;
+    border-radius: 8px;
+    margin: auto ;
+}
+.bar-1{
+    animation: animation 4s ease 0.5s infinite forwards;
+}
+.bar-2{
+    animation: animation 3s ease-in 0.3s infinite forwards;
+}
+.bar-3{
+    animation: animation 2.5s ease-in-out 0.3s infinite forwards;
+}
+ @keyframes animation {
+     0%{
+         transform: scaleY(0.4);
+     }
+     50%{
+        transform: scaleY(1.5);
+     }
+     100%{
+        transform: scaleY(0.4);
+     }
+ }
