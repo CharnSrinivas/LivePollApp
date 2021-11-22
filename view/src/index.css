@@ -1,16 +1,19 @@
 body {
     margin: 0;
+    padding: 0;
     font-family: 'Roboto';
-     /* 'Oxygen', 'Ubuntu', 'Helvetica Neue', sans-serif; */
+    /* 'Oxygen', 'Ubuntu', 'Helvetica Neue', sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-:root{
-    --primary:hsl(279, 80%, 49%);
-    --font-color:hsl(280, 63%, 15%);
-    --primary-hue:279;
-    --primary-sat:80%;
-    --primary-light:49%;
+
+
+:root {
+    --primary: hsl(279, 80%, 49%);
+    --font-color: hsl(246, 12%, 30%);
+    --primary-hue: 279;
+    --primary-sat: 80%;
+    --primary-light: 49%;
     scroll-behavior: smooth;
 }
 

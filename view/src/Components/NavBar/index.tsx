@@ -5,25 +5,19 @@ import Logo from '../Logo/index'
 
 export default function Navbar() {
     const [width, setWidth] = useState(window.innerWidth);
-    window.addEventListener('resize', function () { setWidth(window.innerWidth);console.log(width > 780);
-     })
+    window.addEventListener('resize', function () {
+        setWidth(window.innerWidth); console.log(width > 780);
+    })
     const menu = useRef<HTMLDivElement>(null);
-
-    const toggleMenu = ()=>{
-        if(!menu.current!.classList.contains(styles['links-container-open'])){
-            menu.current!.classList.add(styles['links-container-open']);return
-        }
-        menu.current!.classList.remove(styles['links-container-open']);return
-    }
 
     return (
         <>
             <AppBar sx={{ backgroundColor: '#ffff', maxWidth: '100vw' }} >
                 <Toolbar >
                     <Stack direction={'row'} justifyContent={'space-between'} width='100%' alignItems={'center'} >
-                        <IconButton sx={{borderRadius:'10px'}}>
+                        <IconButton sx={{ borderRadius: '10px' }}>
                             <Logo />
-                            <Typography sx={{marginLeft:'0.3rem'}} variant='h6' color={'primary'} fontFamily='Poppins' fontWeight={'bolder'} letterSpacing={'1px'}>Live poll</Typography>
+                            <Typography sx={{ marginLeft: '0.3rem' }} variant='h6' color={'primary'} fontFamily='Poppins' fontWeight={'bolder'} letterSpacing={'1px'}>Live poll</Typography>
                         </IconButton>
                         {width > 780 &&
                             <Stack
@@ -54,12 +48,13 @@ export default function Navbar() {
                         {
                             width <= 780 &&
                             <Stack
+                                id='nav-bar'
                                 className={styles['links-container']}
                                 direction={'column'}
                                 justifyContent={'space-between'}
                                 ref={menu}
                                 alignItems={'flex-start'} spacing={1.5}>
-                                <Typography sx={{ font: 'inherit' ,marginLeft:'0.3rem'}} variant='body1'>
+                                <Typography sx={{ font: 'inherit', marginLeft: '0.3rem' }} variant='body1'>
                                     <a href={'/create'} style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
                                         Create
                                     </a>
@@ -77,11 +72,20 @@ export default function Navbar() {
                                     </a>
                                 </Typography>
                                 <span ></span>
-                                <Button  variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign Up</Button>
+                                <Button variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign Up</Button>
 
                             </Stack>
                         }
-                        <div   className={styles['menu']} onClick={toggleMenu}>
+                        <div className={styles['menu']} id='menu' onClick={(e) => {
+                            let nav_bar = document.getElementById('nav-bar');
+                            if(nav_bar){
+                                if(nav_bar.getAttribute('data-open')){
+                                    nav_bar.removeAttribute('data-open');return;
+                                }
+                                nav_bar.setAttribute('data-open', 'true');return
+                            }
+                        }
+                        }>
                             <div></div>
                             <div></div>
                             <div></div>

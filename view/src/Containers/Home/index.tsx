@@ -3,6 +3,7 @@ import { Button, Stack, Dialog, TextField, Typography } from '@mui/material'
 import NavBar from '../../Components/NavBar'
 import { getQuestionData, savePollId } from '../../Utils/utils';
 import styles from './home.module.css';
+import LazyImage from '../../Components/LazyImage';
 import './home.css'
 interface StateProps {
     show_join_poll_popup: boolean,
@@ -41,7 +42,6 @@ export default class Home extends React.Component<{}, StateProps> {
         })
     }
     componentDidMount() {
-
         const container = document.getElementById('top-right-container');
         if (container) {
             fetch('media/charts_illustration.svg').then(res => {
@@ -67,19 +67,21 @@ export default class Home extends React.Component<{}, StateProps> {
                             alignItems={'center'}
                             spacing={2}>
                             <Stack className={styles['create-container']} spacing={2}>
-                                <img alt='create' loading='lazy' src='media/create.png'></img>
+                                <LazyImage alt='create' src='media/create.png'></LazyImage>
                                 <p id='some'>
                                     Create <b style={{ color: 'var(--primary)', letterSpacing: '1px', fontSize: 'inherit' }}>Live Polls</b> in no time.
                                 </p>
                                 <p>Simple and fast.</p>
-                                <Button href='create' size='large' variant='contained' sx={{ textTransform: 'none', fontWeight: 'bold' }} >Create</Button>
+                                <Button size='medium' onClick={()=>{window.location.href='create'}} variant='contained' sx={{ textTransform: 'none', fontWeight: 'bold' }} >Create</Button>
                             </Stack>
                             <i color='primary'>OR</i>
                             <Stack className={styles['join-container']} spacing={2}>
-                                <img loading='lazy' alt='vote' src='media/vote.png'></img>
+                                <LazyImage alt='vote' src='media/vote.png'></LazyImage>
                                 <p >Vote to existing poll(s) created by others.</p>
                                 <p>By entering poll id.</p>
-                                <Button size='medium' variant='contained' sx={{ textTransform: 'none', fontWeight: 'bold' }} >Join</Button>
+                                <Button 
+                                size='medium'
+                                onClick={()=>{this.setState({show_join_poll_popup:true})}} variant='contained' sx={{ textTransform: 'none', fontWeight: 'bold' }} >Join</Button>
                             </Stack>
                         </Stack>
                         {window.innerWidth > 980 &&
@@ -92,19 +94,19 @@ export default class Home extends React.Component<{}, StateProps> {
                             <Typography variant='h4' sx={{ color: 'var(--font-color)' }}>Features</Typography>
                             <Stack direction={'row'} className={styles['features-container']} alignItems={'center'} justifyContent={'center'}>
                                 <div>
-                                    <img src='media/free.png' alt='free' loading='lazy'></img>
+                                    <LazyImage src='media/free.png' alt='free' ></LazyImage>
                                     <Typography variant='h5' color={'var(--font-color)'}>Free</Typography>
                                     <span></span>
                                     <p>Save money! All our polls are 100% free to create and monitor.</p>
                                 </div>
                                 <div>
-                                    <img src='media/clock.png' alt='clock' loading='lazy'></img>
+                                    <LazyImage src='media/clock.png' alt='clock' ></LazyImage>
                                     <Typography variant='h5' color={'var(--font-color)'}>Real Time</Typography>
                                     <span></span>
                                     <p>All our polls are live and up to date. You can monitor your live polls with our any refreshing.</p>
                                 </div>
                                 <div>
-                                    <img src='media/shield.png' alt='shield' loading='lazy'></img>
+                                    <LazyImage src='media/shield.png' alt='shield' ></LazyImage>
                                     <Typography variant='h5' color={'var(--font-color)'}>Safe & Secure</Typography>
                                     <span></span>
                                     <p>We use latest technology to prevent any type of malicious things.We also prevent duplicate votes.</p>
@@ -126,7 +128,7 @@ export default class Home extends React.Component<{}, StateProps> {
                                         id='join-id-input'
                                         autoFocus
                                         variant='standard'
-                                        onKeyDown={(e) => { if (e.keyCode === 13 || e.key === 'Enter') { this.joinPoll() } }} />
+                                        onKeyDown={(e) => { if (e.keyCode === 13 || e.key === 'Enter' || e.key === 'enter') { this.joinPoll() } }} />
                                     <Button size='large' variant='contained' onClick={this.joinPoll}>Join</Button>
                                 </Stack>
                             </Stack>

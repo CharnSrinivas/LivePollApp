@@ -5,14 +5,13 @@ import {
     InputAdornment,
     Button,
     Stack,
-    FormLabel,
     Tooltip,
     CircularProgress,
     Snackbar,
     Alert,
-    Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Icon
+    Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText
 } from "@mui/material";
-import { Quiz, Add, SaveOutlined } from "@mui/icons-material";
+import {  Add, SaveOutlined } from "@mui/icons-material";
 import OptionField from './OptionField';
 import { sendQuestionData, saveQuestionId, getSavedQuestionId } from "../../Utils/utils";
 import Navbar from "../../Components/NavBar";
@@ -131,7 +130,7 @@ export default class Create extends React.Component<{}, StateProps>{
         }
         this.setState({ submit_loading: true });
 
-        let data = { options, question,question_title:this.state.question_title ,question_description:description}
+        let data = { options, question,question_title:title ,question_description:description}
         sendQuestionData(data).then(json => {
             if (json.question_id) {
                 saveQuestionId(json.question_id!)
@@ -169,7 +168,7 @@ export default class Create extends React.Component<{}, StateProps>{
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start" >
-                                            <object data="media/icons/T.svg" type="image/svg+xml"></object>
+                                            <object aria-label="T" data="media/icons/T.svg" type="image/svg+xml"></object>
                                         </InputAdornment>
                                     ),
                                 }}
@@ -188,7 +187,7 @@ export default class Create extends React.Component<{}, StateProps>{
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start" >
-                                            <object data="media/icons/question_mark.svg" type="image/svg+xml"></object>
+                                            <object aria-label="question_mark" data="media/icons/question_mark.svg" type="image/svg+xml"></object>
                                         </InputAdornment>
                                     ),
                                 }}
@@ -273,7 +272,7 @@ export default class Create extends React.Component<{}, StateProps>{
                         <Button variant="text" size='small' color='inherit'
                             onClick={() => { this.setState({ show_success_dialog: false }) }}
                         >close</Button>
-                        <Button variant="contained" size='medium' color='primary'>View poll</Button>
+                        <Button variant="contained" size='medium'  color='primary'>View poll</Button>
                     </DialogActions>
 
                 </Dialog>

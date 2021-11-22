@@ -50,21 +50,14 @@
     max-height: 80vh;
     display: flex;
     flex-direction: column;
-    padding: 1.5rem 2rem;
+    padding: 1rem 2rem;
     overflow-y: scroll;
-    scrollbar-width: none !important; 
-    -ms-overflow-style: none !important;
+    /* scrollbar-width: none !important;  */
+    /* -ms-overflow-style: none !important; */
     
 }
-/* @supports (backdrop-filter: blur(7px)){
-    .left{
-        background: hsla(0, 0%, 100%, 0.1);
-        backdrop-filter: blur(7.5px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid hsla(0, 0%, 100%, 0.6);
-    }
-} */
-.left::-webkit-scrollbar {
+
+.left::-webkit-scrollbar{
     display: none !important;
 }
 
@@ -74,7 +67,7 @@
     font-weight: normal;
     font-size: 1.8rem;
     letter-spacing: 1.2px;
-    font-family: 'Poppins';
+    /* font-family: 'Poppins'; */
 }
 
 .left>div {
@@ -87,6 +80,7 @@
     vertical-align: top;
 }
 .left div h3 {
+    font-weight: normal;
     color: var(--font-color);
     letter-spacing: 1.1px;
     font-size: 1.2rem;
@@ -107,12 +101,26 @@
     color: var(--primary);
 }
 
-/* .left > div:nth-child(3) object{
-    width: rem;
-    background-color: red; 
-} */
 
 .right img {
     width: calc(40vw + 1rem);
 
+}
+@media screen and (max-width:780px) {
+    .right{
+        display: none;
+    }
+    .wrapper{
+        justify-content: center;
+        width: 95%;
+    }
+    .left{
+        width: 100%;
+        min-width: none;
+        max-width: none;
+        /* padding-top: 0.6rem; */
+        max-height: none;
+        height: auto;margin-bottom: 3rem;
+    }
+    /* h2{display: none;} */
 }
