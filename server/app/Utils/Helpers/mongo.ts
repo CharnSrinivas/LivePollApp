@@ -49,7 +49,7 @@ class MongoHelper {
                 options.push({ no_of_polls: 0, option: opt, index });
             })
 
-            let _question: DbQuestion = { created_time: question.created_time, options, question: question.question, question_id: question.question_id, votes: [] };
+            let _question: DbQuestion = {...question,votes:[],options:options};
 
             this.db?.collection(LivePollsCollectionName).insertOne(_question).then((doc) => {
                 resolve(doc);
@@ -75,7 +75,8 @@ class MongoHelper {
                         'options.index': opt_index
                     }, {
                     $inc: {
-                        'options.$.no_of_polls': 1
+                        'options.$.no_of_polls': 1,
+                        'total_votes':1
                     }, $addToSet: {
                         'votes': vote
                     }
@@ -86,7 +87,9 @@ class MongoHelper {
     }
     public isVotedToPoll = (question_id:string,ip_addr:string): Promise<boolean> => {
         return new Promise((res, rej) => {
-            this.db!.collection('LivePolls').find({ "question_id": question_id,"votes.ip_addr":ip_addr }).project({ votes: 0, _id: 0 }).toArray().then(data => {
+            this.db!.collection(LivePollsCollectionName).find({ "question_id": question_id,"votes.ip_addr":ip_addr }).project({ votes: 0, _id: 0 }).toArray().then(data => {
+                console.log(data);
+                
                 if(!data){res(false);return;}
                 if (data.length > 0) {
                     res(true);return;

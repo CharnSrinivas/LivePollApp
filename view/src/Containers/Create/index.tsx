@@ -38,16 +38,16 @@ export default class Create extends React.Component<{}, StateProps>{
     constructor(props: any) {
         super(props);
         this.state = {
-            question: '',
-            options: [],
+            question: 'this is question',
+            options: ['Option 1','Option 2'],
             no_of_options: 2,
             submit_loading: false,
             open_snackbar: false,
             snackbar_msg: '',
             snack_bar_severity: 'warning',
             show_success_dialog: false,
-            question_description: '',
-            question_title: '',
+            question_description: 'Let’s walk through an example to illustrate how the git log command works. We have been working on a repository called “demo-repository”. Now we want to see a list of all the commits we have pushed to our repository. To do so, we can use this command:',
+            question_title: 'TITLE',
             no_question_error:false,
             no_title_error:false
         }
@@ -165,6 +165,7 @@ export default class Create extends React.Component<{}, StateProps>{
                                 placeholder="Enter poll title"
                                 required type={'text'} maxRows={1}rows={0}
                                 id='poll-title'
+                                value={this.state.question_title}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start" >
@@ -184,6 +185,7 @@ export default class Create extends React.Component<{}, StateProps>{
                                 placeholder="Enter your question?"
                                 required type={'text'} maxRows={1}
                                 id='poll-question'
+                                value={this.state.question}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start" >
@@ -197,7 +199,7 @@ export default class Create extends React.Component<{}, StateProps>{
                             <h3>Description</h3>
                             <TextField
                                 multiline
-                                rows={4}
+                                rows={4}value={this.state.question_description}
                                 onChange={e => { this.setState({ question_description: e.target.value }) }}
                                 variant='outlined'
                                 placeholder="Your description goes here..(optional)"

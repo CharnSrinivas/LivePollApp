@@ -7,11 +7,7 @@ const router = Router();
 router.get(
     '/fetch_poll',
     function (req: Request, res: Response) {
-        console.log(req.connection.remoteAddress, req.socket.remoteAddress);
         var forwardedIpsStr = req.header('x-forwarded-for');
-        console.log(forwardedIpsStr);
-        console.log(req.ip, req.ips);
-
         let query_parms = req.query;
         if (!query_parms.id) { res.statusCode = 400; res.send(); return; }
         mongo.fetchQuestionData(query_parms.id as string).
@@ -42,27 +38,30 @@ router.get(
     async function (req: Request, res: Response) {
         // let query_parms = { question_id: 'AAAA', option_index: '2' }
         let query_parms = req.query;
+
         let ip_addr = req.connection.remoteAddress || req.socket.remoteAddress as string;
         if (!(query_parms.question_id && query_parms.option_index)) {
             res.statusCode = 400;
-            res.send('Invalid query parameters!');
+            res.json({ msg: 'Invalid query parameters 1!' });
             return;
         }
         try {
             let is_already_voted = await mongo.isVotedToPoll(query_parms.question_id as string, ip_addr);
-            if (is_already_voted) { res.statusCode = 400; res.send("You have already voted to this poll."); return; }
+            if (is_already_voted) { res.statusCode = 400; res.json({is_already_voted:true}); return; }
         } catch (error) {
-            res.statusCode = 500; res.send(error); return;
+            res.statusCode = 500; res.json({error:error}); return;
         }
 
         let option_index = parseInt(query_parms.option_index as string);
-        if (!option_index) {
+
+        if (option_index === NaN || option_index == NaN) {
             res.statusCode = 400;
-            res.send('Invalid query parameters!'); return;
+            res.json({ msg: 'Invalid query parameters .Option_index in is not valid integer.' });
+            return;
         }
         let question_id = query_parms.question_id as string;
         mongo.voteToQuestion(question_id, option_index, ip_addr.toString()).then(doc_update_result => {
-            res.send('voted'); return;
+            res.json({...doc_update_result}); return;
         }).catch(err => {
             res.statusCode = 500; res.send(err); return;
         })
@@ -73,15 +72,14 @@ router.post(
     '/create',
     function (req: Request, res: Response) {
         const data = req.body;
-        console.log(data);
 
-        if (!(data.options && data.question)) {
+        if (!(data.options && data.question && data.question_description && data.question_title)) {
             res.statusCode = 400; // ? ==================> 400 Bad Request <==================
-            res.send('Insufficient query parameters')
+            res.send('Insufficient data!'); return;
         }
         if (data.options.length < 2) {
             res.statusCode = 203 //? ==================>  203 Non-Authoritative Information <==================
-            res.send('Number of \'options\' is less than 2.');
+            res.send('Number of \'options\' is less than 2.'); return
         }
         var question_id = generateRandomQuestionId();
         var created_time = new Date();
@@ -89,15 +87,15 @@ router.post(
             created_time,
             options: data.options,
             question: data.question,
-            question_id: question_id
+            question_id: question_id,
+            total_votes: 0, question_description: data.question_description, question_title: data.question_title
         }).then((doc) => {
-            console.log('\n\t\tcreated...\n');
             res.statusCode = 201;  //? ==================>  201 Created <==================
-            res.send({ created_time, question_id })
+            res.send({ created_time, question_id }); return
         }).catch(err => {
             console.log(err);
             res.statusCode = 500;  //? ==================>  500 Internal server error <==================
-            res.send();
+            res.send(); return
         });
     })
 

@@ -13,10 +13,12 @@ export interface Option{
 
 export interface Question{
     question_id:string;
+    question_title:string;
     question:string;
     options:string[];
     created_time:Date;
-
+    total_votes:number
+    question_description:string;
 }
 export interface DbVote{
     created_time:Date;
@@ -27,8 +29,12 @@ export interface DbVote{
 }
 export interface DbQuestion{
     question_id:string;
+    question_title:string;
     question:string;
     options:Option[];
     created_time:Date;
-    votes:Db[]
+    votes:DbVote[];
+    total_votes:number;
+    question_description:string;
+
 }
