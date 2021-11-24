@@ -1,0 +1,73 @@
+.container {
+    min-width: 100vw;
+    min-height: 100vh;
+    background: linear-gradient(73.43deg, rgba(103, 15, 247, 0.65) 0%, rgba(246, 228, 255, 0.65) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container > div{
+    width: 50%;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    background-color: #ffff;
+    padding: 2rem 3rem;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.icon{
+    background-color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 0.3rem;
+    width: 3.5rem;
+    height: 3.5rem;
+}
+.wrapper  > div:nth-child(1){
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    
+}
+.wrapper p{
+    text-align: center;
+    margin-top: 0.3rem;
+    color:hsl(246, 24%, 32%);font-weight:normal;
+    font-size: 2rem;
+}
+.wrapper > div:nth-child(3){
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3.5rem;
+}
+.icon > svg path{
+    fill: #ffff;
+}
+.wrapper >div{
+    width: 100%;
+}
+.icon  > svg{width: 2rem;}
+.wrapper > div:nth-child(2) {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.wrapper > div:nth-child(2)> div{width: 100%;}
+.wrapper > div:nth-child(2) > div{
+    
+    margin: 0.6rem auto;
+}

@@ -1,5 +1,9 @@
 view/node_modules
 server/node_modules
 
+
 view/build
 server/build
+
+server/.env
+view/.env

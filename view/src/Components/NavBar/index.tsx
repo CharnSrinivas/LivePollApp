@@ -67,22 +67,21 @@ export default function Navbar() {
                                 </Typography>
                                 <span ></span>
                                 <Typography sx={{ font: 'inherit' }} variant='body1'>
-                                    <a href={'/#'} style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
+                                    <a href={'/signin'}  style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
                                         Sign In
                                     </a>
                                 </Typography>
                                 <span ></span>
-                                <Button variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign Up</Button>
-
+                                <Button variant='contained' onClick={() => { window.location.href = '/signup' }} sx={{ textTransform: 'none' }} size='small'>Sign Up</Button>
                             </Stack>
                         }
                         <div className={styles['menu']} id='menu' onClick={(e) => {
                             let nav_bar = document.getElementById('nav-bar');
-                            if(nav_bar){
-                                if(nav_bar.getAttribute('data-open')){
-                                    nav_bar.removeAttribute('data-open');return;
+                            if (nav_bar) {
+                                if (nav_bar.getAttribute('data-open')) {
+                                    nav_bar.removeAttribute('data-open'); return;
                                 }
-                                nav_bar.setAttribute('data-open', 'true');return
+                                nav_bar.setAttribute('data-open', 'true'); return
                             }
                         }
                         }>
