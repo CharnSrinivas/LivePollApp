@@ -7,6 +7,7 @@ import { DB_USERS_COLL_NAME } from '../../config';
 import bcrypt from 'bcrypt'
 import { cookie_parser } from '../middlewares';
 import { v4 as uuid } from 'uuid'
+import mongo from '../Utils/Helpers/mongo';
 const users_coll = MongoHelper.db!.collection(DB_USERS_COLL_NAME);
 const auth_router = Router();
 const jwt_secret_key = process.env['SECRET_KEY'] || '123466789';
@@ -26,7 +27,7 @@ auth_router.post('/register', (req, res, next) => {
                     bcrypt.hash(body.password, 12)
                         .then((password) => {
                             const user: User = {
-                                id: id, username: body.username, password: password
+                                id: id, username: body.username, password: password, polls: []
                             }
                             users_coll.insertOne(user, (err, user_document) => {
                                 if (err) {
@@ -40,7 +41,6 @@ auth_router.post('/register', (req, res, next) => {
                             })
                         })
                 }
-
             })
 
         }
@@ -60,10 +60,12 @@ auth_router.get('/verify', cookie_parser, (req, res) => {
     if (!token) {
         res.statusCode = 401;
         res.statusMessage = "Unauthorize access!"
-        res.json({ error: true, msg: "Unauthorize access!" }); return;
+        res.json({ error: true, msg: "auth-token is missing" }); return;
     }
-    const id = jwt.verify(token, jwt_secret_key);
-
+    const id = jwt.verify(token, jwt_secret_key).toString();
+    mongo.findUser(id).then(user_data => {
+        res.json(user_data).end(); return;
+    })
 })
 
 auth_router.post('/login', cookie_parser, (req, res) => {
@@ -75,8 +77,8 @@ auth_router.post('/login', cookie_parser, (req, res) => {
             if (user) {
                 res.statusCode = 200;
                 const user_id = user.id;
-                const token = jwt.sign(user_id,jwt_secret_key);
-                res.cookie('auth-token',token,{sameSite:'none',secure:true});
+                const token = jwt.sign(user_id, jwt_secret_key);
+                res.cookie('auth-token', token, { sameSite: 'none', secure: true });
                 res.json({ error: false, msg: "Signed Up successfully!" }); return;
             } else {
                 res.statusCode = 400;

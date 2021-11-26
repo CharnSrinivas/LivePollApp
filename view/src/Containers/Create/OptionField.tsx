@@ -29,7 +29,6 @@ const OptionField =
                     sx={{ width: '100%' }}
                     placeholder={`Select your option-${i + 1}`}
                     id={`poll-option-${i + 1}`}
-                    helperText={'Option should not be empty.'}
 
                     InputProps={{
                         startAdornment: (

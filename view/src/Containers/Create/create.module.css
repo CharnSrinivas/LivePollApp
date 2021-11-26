@@ -70,7 +70,6 @@
     letter-spacing: 1.2px;
     /* font-family: 'Poppins'; */
 }
-
 .left>div {
     width: 100%;
     display: flex;
@@ -87,6 +86,9 @@
     font-size: 1.2rem;
 }
 
+.left .advanced-options{
+    
+}
 
 .option-number {
     width: 1.2rem !important;

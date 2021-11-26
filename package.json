@@ -8,5 +8,6 @@
     "dev-view": "cd view && npm start"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }

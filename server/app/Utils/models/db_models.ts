@@ -2,6 +2,8 @@ export interface User{
     id:string;
     username:string;
     password:string;
+    polls:DbQuestion[]
+    profile_img?:string
 }
 
 
@@ -17,6 +19,8 @@ export interface Question{
     question:string;
     options:string[];
     created_time:Date;
+    created_date:string;
+    expire_at:Date|null
     total_votes:number
     question_description:string;
 }
@@ -33,8 +37,9 @@ export interface DbQuestion{
     question:string;
     options:Option[];
     created_time:Date;
+    created_date:string;
     votes:DbVote[];
     total_votes:number;
     question_description:string;
-
+    
 }

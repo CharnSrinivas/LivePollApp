@@ -1,4 +1,3 @@
-import './App.css';
 import { Switch, BrowserRouter as Router, Route } from 'react-router-dom'
 import Home from './Containers/Home';
 import Vote from './Containers/Vote';
@@ -7,7 +6,7 @@ import SignIn from './Containers/Signin'
 import SignUp from './Containers/Signup'
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-
+import { primary_color, secondary_color, Min_Percentage_of_FontSize } from './config';
 
 function App() {
   const theme = createTheme({
@@ -15,11 +14,11 @@ function App() {
       mode: 'light',
       primary:
       {
-        main: '#9C19E0'
+        main: primary_color
       },
       secondary:
       {
-        main: '#670FF7'
+        main: secondary_color
       }
     }
   })
@@ -27,7 +26,7 @@ function App() {
     let width = window.innerWidth;
     if (width <= 1000) {
       let per = Math.floor((width / 10) - 10);
-      if (per <= 75) { document.documentElement.style.fontSize = '75%' }
+      if (per <= Min_Percentage_of_FontSize) { document.documentElement.style.fontSize = `${Min_Percentage_of_FontSize}%` }
       else {
         document.documentElement.style.fontSize = per.toString() + '%';
       }

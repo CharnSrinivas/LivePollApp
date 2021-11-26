@@ -214,6 +214,9 @@
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
+    cursor: pointer;
+    height: fit-content;
+    /* margin: 0.3rem  auto; */
 }
 .right-bottom div svg{
     width: 2rem;

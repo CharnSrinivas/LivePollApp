@@ -10,6 +10,5 @@ export function cookie_parser(req: Request, res: Response, next: NextFunction) {
         cookies[cookie[0]] = cookie[1];
     })
     req.cookies=cookies
-    
     next(null); return;
 }

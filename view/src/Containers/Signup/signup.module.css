@@ -7,7 +7,8 @@
     justify-content: center;
 }
 .container > div{
-    width: 50%;
+    max-width: 60rem ;
+    min-width: 25rem;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     background-color: #ffff;
@@ -19,7 +20,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    /* width: calc(40rem); */
+    font-weight: normal;
 }
 .icon{
     background-color: var(--primary);

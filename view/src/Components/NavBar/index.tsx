@@ -5,6 +5,7 @@ import Logo from '../Logo/index'
 
 export default function Navbar() {
     const [width, setWidth] = useState(window.innerWidth);
+    const [menu_open, setMenuOpen] = useState(false);
     window.addEventListener('resize', function () {
         setWidth(window.innerWidth); console.log(width > 780);
     })
@@ -17,7 +18,7 @@ export default function Navbar() {
                     <Stack direction={'row'} justifyContent={'space-between'} width='100%' alignItems={'center'} >
                         <IconButton sx={{ borderRadius: '10px' }}>
                             <Logo />
-                            <Typography sx={{ marginLeft: '0.3rem' }} variant='h6' color={'primary'} fontFamily='Poppins' fontWeight={'bolder'} letterSpacing={'1px'}>Live poll</Typography>
+                            <Typography sx={{ marginLeft: '0.3rem' }} variant='h6' color={'primary'} fontFamily='Poppins, sans-serif' fontWeight={'bolder'} letterSpacing={'1px'}>Live poll</Typography>
                         </IconButton>
                         {width > 780 &&
                             <Stack
@@ -37,11 +38,11 @@ export default function Navbar() {
                                 </Typography>
                                 <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} spacing={4} sx={{ marginLeft: '500px' }}>
                                     <Typography sx={{ font: 'inherit' }} variant='body1'>
-                                        <a href={'/#'} style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
+                                        <a href={'/signin'} style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
                                             Sign In
                                         </a>
                                     </Typography>
-                                    <Button href='#' variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign Up</Button>
+                                    <Button href='#' onClick={() => { window.location.href = '/signup' }} variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign Up</Button>
                                 </Stack>
                             </Stack>
                         }
@@ -49,6 +50,7 @@ export default function Navbar() {
                             width <= 780 &&
                             <Stack
                                 id='nav-bar'
+                                data-open={menu_open}
                                 className={styles['links-container']}
                                 direction={'column'}
                                 justifyContent={'space-between'}
@@ -67,7 +69,7 @@ export default function Navbar() {
                                 </Typography>
                                 <span ></span>
                                 <Typography sx={{ font: 'inherit' }} variant='body1'>
-                                    <a href={'/signin'}  style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
+                                    <a href={'/signin'} style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
                                         Sign In
                                     </a>
                                 </Typography>
@@ -75,14 +77,10 @@ export default function Navbar() {
                                 <Button variant='contained' onClick={() => { window.location.href = '/signup' }} sx={{ textTransform: 'none' }} size='small'>Sign Up</Button>
                             </Stack>
                         }
-                        <div className={styles['menu']} id='menu' onClick={(e) => {
-                            let nav_bar = document.getElementById('nav-bar');
-                            if (nav_bar) {
-                                if (nav_bar.getAttribute('data-open')) {
-                                    nav_bar.removeAttribute('data-open'); return;
-                                }
-                                nav_bar.setAttribute('data-open', 'true'); return
-                            }
+                        <div className={styles['menu']} id='menu' data-open={menu_open} onClick={(e) => {
+                            if(menu_open){
+                                setMenuOpen(false);return
+                            }setMenuOpen(true);return
                         }
                         }>
                             <div></div>

@@ -120,8 +120,7 @@ export function isMobile() {
     let userAgent = navigator.userAgent;
     let mobiles = ['Android','BlackBerry','iPhone',"iPad","iPod","Opera Mini","IEMobile"]
     for (let i = 0; i < mobiles.length; i++) {
-        const element = mobiles[i];
-        if(userAgent.match(element)){
+        if(userAgent.match(mobiles[i])){
             return true;
         }        
     }

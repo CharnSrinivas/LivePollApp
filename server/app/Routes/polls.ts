@@ -7,15 +7,14 @@ const router = Router();
 router.get(
     '/fetch_poll',
     function (req: Request, res: Response) {
-        var forwardedIpsStr = req.header('x-forwarded-for');
         let query_parms = req.query;
         if (!query_parms.id) { res.statusCode = 400; res.send(); return; }
         mongo.fetchQuestionData(query_parms.id as string).
-            then(question_data => {
-                res.json(question_data);
+            then(question_data => {                
+                res.json(question_data).end();
             }).catch(err => {
                 console.error(err);
-                res.statusCode = 400; res.send(); return;
+                res.statusCode = 400; res.send().end()
             })
 
     }
@@ -28,7 +27,7 @@ router.post(
         if (data.question_id, ip_addr) {
             mongo.isVotedToPoll(data.question_id, ip_addr.toString()).then(is_voted => {
                 res.json({ is_voted, ip_addr: ip_addr.toString() }); return
-            }).catch(err => { res.statusCode = 500; res.send(err); return; })
+            }).catch(err => { res.statusCode = 500; res.send(err).end() })
         }
     }
 )
@@ -47,9 +46,9 @@ router.get(
         }
         try {
             let is_already_voted = await mongo.isVotedToPoll(query_parms.question_id as string, ip_addr);
-            if (is_already_voted) { res.statusCode = 400; res.json({is_already_voted:true}); return; }
+            if (is_already_voted) { res.statusCode = 400; res.json({is_already_voted:true}).end() }
         } catch (error) {
-            res.statusCode = 500; res.json({error:error}); return;
+            res.statusCode = 500; res.json({error:error}).end()
         }
 
         let option_index = parseInt(query_parms.option_index as string);
@@ -61,7 +60,7 @@ router.get(
         }
         let question_id = query_parms.question_id as string;
         mongo.voteToQuestion(question_id, option_index, ip_addr.toString()).then(doc_update_result => {
-            res.json({...doc_update_result}); return;
+            res.json({...doc_update_result}).end()
         }).catch(err => {
             res.statusCode = 500; res.send(err); return;
         })
@@ -88,7 +87,11 @@ router.post(
             options: data.options,
             question: data.question,
             question_id: question_id,
-            total_votes: 0, question_description: data.question_description, question_title: data.question_title
+            total_votes: 0, 
+            question_description: data.question_description, 
+            question_title: data.question_title,
+            created_date:new Date().toLocaleDateString(),
+            expire_at:data.expire_at? new Date(data.expire_at) : null
         }).then((doc) => {
             res.statusCode = 201;  //? ==================>  201 Created <==================
             res.send({ created_time, question_id }); return

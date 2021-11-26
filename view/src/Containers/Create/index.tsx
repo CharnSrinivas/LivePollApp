@@ -9,14 +9,15 @@ import {
     CircularProgress,
     Snackbar,
     Alert,
-    Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText
+    Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Collapse
 } from "@mui/material";
-import {  Add, SaveOutlined } from "@mui/icons-material";
+import { Add, ExpandLess, ExpandMore, SaveOutlined } from "@mui/icons-material";
 import OptionField from './OptionField';
 import { sendQuestionData, saveQuestionId, getSavedQuestionId } from "../../Utils/utils";
 import Navbar from "../../Components/NavBar";
 import styles from './create.module.css';
-
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { DateTimePicker, DesktopDatePicker, DesktopDateTimePicker, DesktopTimePicker, LocalizationProvider, MobileDateTimePicker } from "@mui/lab";
 
 interface StateProps {
     question: string;
@@ -25,12 +26,15 @@ interface StateProps {
     question_description: string;
     no_of_options: number;
     submit_loading: boolean;
+    window_width: number;
     open_snackbar: boolean;
     snackbar_msg: string;
     snack_bar_severity: 'error' | 'success' | 'warning' | 'info';
     show_success_dialog: boolean
-    no_question_error:boolean;
-    no_title_error:boolean;
+    no_question_error: boolean;
+    no_title_error: boolean;
+    open_advance_settings: boolean;
+    expire_date: Date | null
 }
 
 export default class Create extends React.Component<{}, StateProps>{
@@ -39,7 +43,7 @@ export default class Create extends React.Component<{}, StateProps>{
         super(props);
         this.state = {
             question: 'this is question',
-            options: ['Option 1','Option 2'],
+            options: ['Option 1', 'Option 2'],
             no_of_options: 2,
             submit_loading: false,
             open_snackbar: false,
@@ -48,8 +52,11 @@ export default class Create extends React.Component<{}, StateProps>{
             show_success_dialog: false,
             question_description: 'Let’s walk through an example to illustrate how the git log command works. We have been working on a repository called “demo-repository”. Now we want to see a list of all the commits we have pushed to our repository. To do so, we can use this command:',
             question_title: 'TITLE',
-            no_question_error:false,
-            no_title_error:false
+            no_question_error: false,
+            no_title_error: false,
+            open_advance_settings: false,
+            expire_date: null,
+            window_width: window.innerWidth
         }
         let options = this.state.options;
         for (let i = 0; i < this.state.no_of_options; i++) {
@@ -57,7 +64,12 @@ export default class Create extends React.Component<{}, StateProps>{
         }
         this.setState({ options });
     };
-
+    componentDidMount() {
+        window.addEventListener('resize', () => {
+            this.setState({ window_width: window.innerWidth });
+        }
+        )
+    }
     addNewOptionField = () => {
         this.setState({ no_of_options: this.state.no_of_options + 1 });
         let options = this.state.options;
@@ -103,24 +115,24 @@ export default class Create extends React.Component<{}, StateProps>{
         let question = this.state.question;
         let title = this.state.question_title;
         let description = this.state.question_description;
-        if(description.length <1 || description === ' '.repeat(description.length)){
+        if (description.length < 1 || description === ' '.repeat(description.length)) {
             description = ''
         }
-        
+
         if (options.length <= 1 || this.state.no_of_options <= 1) {
             this.setState({ open_snackbar: true, snack_bar_severity: 'warning', snackbar_msg: 'No.Of options should be more than one.' }); return;
         }
         if (question.length <= 0 || question === ' '.repeat(question.length)) {
-            this.setState({ open_snackbar: true, snack_bar_severity: 'error', snackbar_msg: 'Question field is empty.' ,no_question_error:true});
+            this.setState({ open_snackbar: true, snack_bar_severity: 'error', snackbar_msg: 'Question field is empty.', no_question_error: true });
             document.getElementById('poll-question')?.focus();
             return;
         }
         if (title.length <= 0 || title === ' '.repeat(title.length)) {
-            this.setState({ open_snackbar: true, snack_bar_severity: 'error', snackbar_msg: 'Title field is empty.' ,no_title_error:true});
+            this.setState({ open_snackbar: true, snack_bar_severity: 'error', snackbar_msg: 'Title field is empty.', no_title_error: true });
             document.getElementById('poll-title')?.focus();
             return;
         }
-        this.setState({no_question_error:false,no_title_error:false})
+        this.setState({ no_question_error: false, no_title_error: false })
         for (let i = 0; i < options.length; i++) {
             if (options[i] === ' '.repeat(options[i].length)) {
                 this.setState({ open_snackbar: true, snack_bar_severity: 'warning', snackbar_msg: 'Option(s) fields is empty.' });
@@ -130,7 +142,7 @@ export default class Create extends React.Component<{}, StateProps>{
         }
         this.setState({ submit_loading: true });
 
-        let data = { options, question,question_title:title ,question_description:description}
+        let data = { options, question, question_title: title, question_description: description, expire_at: this.state.expire_date }
         sendQuestionData(data).then(json => {
             if (json.question_id) {
                 saveQuestionId(json.question_id!)
@@ -161,9 +173,8 @@ export default class Create extends React.Component<{}, StateProps>{
                                 onChange={e => { this.setState({ question_title: e.target.value }) }}
                                 variant='outlined'
                                 error={this.state.no_title_error}
-                                helperText="Error!,Title should not be empty"
                                 placeholder="Enter poll title"
-                                required type={'text'} maxRows={1}rows={0}
+                                required type={'text'} maxRows={1} rows={0}
                                 id='poll-title'
                                 value={this.state.question_title}
                                 InputProps={{
@@ -181,7 +192,6 @@ export default class Create extends React.Component<{}, StateProps>{
                                 onChange={e => { this.setState({ question: e.target.value }) }}
                                 variant='outlined'
                                 error={this.state.no_question_error}
-                                helperText="Error!, Question should not be empty"
                                 placeholder="Enter your question?"
                                 required type={'text'} maxRows={1}
                                 id='poll-question'
@@ -199,18 +209,18 @@ export default class Create extends React.Component<{}, StateProps>{
                             <h3>Description</h3>
                             <TextField
                                 multiline
-                                rows={4}value={this.state.question_description}
+                                rows={4} value={this.state.question_description}
                                 onChange={e => { this.setState({ question_description: e.target.value }) }}
                                 variant='outlined'
                                 placeholder="Your description goes here..(optional)"
                                 required type={'text'}
-                                // InputProps={{
-                                //     startAdornment: (
-                                //         <InputAdornment position="end"  >                                            
-                                //                 <object data="media/icons/pencil.svg" type="image/svg+xml"></object>
-                                //         </InputAdornment>
-                                //     ),
-                                // }}
+                            // InputProps={{
+                            //     startAdornment: (
+                            //         <InputAdornment position="end"  >                                            
+                            //                 <object data="media/icons/pencil.svg" type="image/svg+xml"></object>
+                            //         </InputAdornment>
+                            //     ),
+                            // }}
                             />
                         </div>
 
@@ -224,6 +234,35 @@ export default class Create extends React.Component<{}, StateProps>{
                             </Tooltip>
                         </Stack>
 
+                        <div style={{ width: '100%', height: '1px', backgroundColor: '#c4c4c4', marginTop: '0.3rem' }}></div>
+                        <Stack className={styles['advanced-settings']} width={'100%'} direction={'column'}>
+                            <Stack direction={'row'} width={'100%'} justifyContent={'space-between'} alignItems={'center'} >
+                                <p style={{ cursor: 'pointer' }} onClick={() => { this.setState({ open_advance_settings: !this.state.open_advance_settings }) }} >Advanced settings</p>
+                                <div style={{ cursor: 'pointer' }} onClick={() => { this.setState({ open_advance_settings: !this.state.open_advance_settings }) }}>
+                                    {this.state.open_advance_settings ? <ExpandLess /> : <ExpandMore />}
+                                </div>
+                            </Stack>
+                            <Collapse unmountOnExit in={this.state.open_advance_settings}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    {this.state.window_width >= 780 &&
+                                        <DesktopDateTimePicker
+                                            label="Expire date"
+                                            value={this.state.expire_date}
+                                            minDateTime={new Date()}
+                                            onChange={(new_date) => { this.setState({ expire_date: new_date }) }}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />}
+                                    {this.state.window_width < 780 &&
+                                        <MobileDateTimePicker
+                                            label="Expire date"
+                                            value={this.state.expire_date}
+                                            minDateTime={new Date()}
+                                            onChange={(new_date) => { this.setState({ expire_date: new_date }) }}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />}
+                                </LocalizationProvider>
+                            </Collapse>
+                        </Stack>
                         {!this.state.submit_loading &&
                             <Button
                                 startIcon={<SaveOutlined />}
@@ -274,7 +313,7 @@ export default class Create extends React.Component<{}, StateProps>{
                         <Button variant="text" size='small' color='inherit'
                             onClick={() => { this.setState({ show_success_dialog: false }) }}
                         >close</Button>
-                        <Button variant="contained" size='medium'  color='primary'>View poll</Button>
+                        <Button variant="contained" size='medium' color='primary'>View poll</Button>
                     </DialogActions>
 
                 </Dialog>

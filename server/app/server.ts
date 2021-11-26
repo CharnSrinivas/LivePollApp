@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import MongoHelper from './Utils/Helpers/mongo';
 import PollRouter from './Routes/polls';
-import cookie_parser from 'cookie-parser'
 import cors from 'cors'
 const PORT = 5000;
 const app = express();

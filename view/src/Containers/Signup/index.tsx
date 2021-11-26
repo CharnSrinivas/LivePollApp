@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styles from './signup.module.css';
 import { TextField, Button, Slide, Alert, InputAdornment } from '@mui/material'
 import Navbar from '../../Components/NavBar';
 import { SERVER_URL } from '../../config';
-
 export const Signin = () => {
     const [user_name, setUserName] = useState('')
     const [password, setPassword] = useState('')
@@ -16,8 +15,8 @@ export const Signin = () => {
     const [password_field_error, setPasswordFieldError] = useState(false);
 
     const validFields = () => {
-        
-        if(user_name.includes(' ')){
+
+        if (user_name.includes(' ')) {
             document.getElementById('user_name')?.focus();
             setUserNameFieldError(true);
             setOpenAlert(true); setAlertSeverity('warning'); setAlertText("No empty spaces are allowed."); setAlertTitle('Error!');
@@ -30,13 +29,13 @@ export const Signin = () => {
             return false;
         }
 
-        if(user_name.length <=8){
+        if (user_name.length <= 8) {
             document.getElementById('user_name')?.focus();
             setUserNameFieldError(true);
             setOpenAlert(true); setAlertSeverity('warning'); setAlertText("Number of character in User Name should be greater than 8."); setAlertTitle('Error!');
             return false;
         }
-        if (password.length <=8) {
+        if (password.length <= 8) {
             document.getElementById('password')?.focus();
             setUserNameFieldError(true);
             setOpenAlert(true); setAlertSeverity('warning'); setAlertText("Number of character in Password should be greater than 8."); setAlertTitle('Error!');
@@ -55,7 +54,7 @@ export const Signin = () => {
             setOpenAlert(true); setAlertSeverity('error'); setAlertText("Password is required!"); setAlertTitle('Error!');
             return false;
         }
-       
+
         return true;
     }
     const signUn = () => {
@@ -71,7 +70,7 @@ export const Signin = () => {
                 }
             ),
             mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },credentials:'include',
+            headers: { 'Content-Type': 'application/json' }, credentials: 'include',
         }).then(res => {
             res.json().then(res_json => {
                 if (res_json.msg) {

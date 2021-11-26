@@ -123,7 +123,6 @@ export default class Home extends React.Component<{}, StateProps> {
                                 <Stack direction={'row'} spacing={2} justifyContent={'space-between'} alignItems={'baseline'}>
                                     <TextField
                                         error={this.state.invalid_poll_id}
-                                        helperText='Invalid poll id'
                                         type={'text'}
                                         id='join-id-input'
                                         autoFocus
