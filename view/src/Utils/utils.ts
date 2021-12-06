@@ -1,6 +1,11 @@
 import { SERVER_URL } from "../config";
+
+// ? Local storage keys
+const Is_Auth = 'is_auth'
+
 const QUESTION_KEY = 'QUESTION_ID';
 const POLL_KEY = 'POLL_KEY'
+
 export const saveQuestionId = (id: string) => {
     localStorage.removeItem(QUESTION_KEY);
     localStorage.setItem(QUESTION_KEY, id);
@@ -24,7 +29,7 @@ export const sendQuestionData = (data: { options: string[], question: string }):
 
     return new Promise((res, rej) => {
         try {
-            fetch(`${SERVER_URL}/create`, { method: "POST", mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(fetch_res => {
+            fetch(`${SERVER_URL}/create`, { method: "POST", mode: 'cors', headers: { 'Content-Type': 'application/json' },credentials:'include', body: JSON.stringify(data) }).then(fetch_res => {
                 fetch_res.json().then(res_json => { res(res_json); });
             }).catch(err => rej(err));
         } catch (err) { rej(err); }
@@ -35,7 +40,7 @@ export const sendQuestionData = (data: { options: string[], question: string }):
 export const getQuestionData = (id: string): Promise<Response> => {
     return new Promise(function (res, rej) {
         try {
-            fetch(`${SERVER_URL}/fetch_poll?id=${id}`, { method: "GET", mode: 'cors' }).then(fetch_res => {
+            fetch(`${SERVER_URL}/fetch_poll?id=${id}`, { method: "GET",credentials:'include', mode: 'cors' }).then(fetch_res => {
                 res(fetch_res);
             }).catch(err => rej(err));
         } catch (err) { rej(err); }
@@ -46,7 +51,7 @@ export function vote(question_id: string, option_index: number, onInValidQuestio
     return new Promise(function (res, rej) {
         try {
             fetch(`${SERVER_URL}/vote?question_id=${question_id}&option_index=${option_index}`,
-                { method: "GET", mode: 'cors' })
+                { method: "GET", mode: 'cors',credentials:'include' })
                 .then(fetch_res => {
                     res(fetch_res);
                 }).catch(
@@ -64,7 +69,7 @@ export function vote(question_id: string, option_index: number, onInValidQuestio
 export function check_vote(question_id: string): Promise<Response> {
     return new Promise((res, rej) => {
         try {
-            fetch(`${SERVER_URL}/check_vote`, { method: 'POST', mode: 'cors', body: JSON.stringify({ question_id }) }).then(fetch_res => {
+            fetch(`${SERVER_URL}/check_vote`, { method: 'POST', mode: 'cors',credentials:'include', body: JSON.stringify({ question_id }) }).then(fetch_res => {
                 res(fetch_res);
             }).catch(err => rej(err))
         } catch (err) { rej(err); }
@@ -118,12 +123,22 @@ export const timeAgo = (prevDate: Date): string => {
 
 export function isMobile() {
     let userAgent = navigator.userAgent;
-    let mobiles = ['Android','BlackBerry','iPhone',"iPad","iPod","Opera Mini","IEMobile"]
+    let mobiles = ['Android', 'BlackBerry', 'iPhone', "iPad", "iPod", "Opera Mini", "IEMobile"]
     for (let i = 0; i < mobiles.length; i++) {
-        if(userAgent.match(mobiles[i])){
+        if (userAgent.match(mobiles[i])) {
             return true;
-        }        
+        }
     }
     return false;
 
 };
+
+export function setIsAuth(is_auth: boolean) {
+    if (is_auth) {
+        localStorage.setItem(Is_Auth, `${is_auth}`); return
+    }
+    localStorage.removeItem(Is_Auth);return;
+}
+export function getIsAuth() {
+    return localStorage.getItem(Is_Auth) ? true : false;
+}

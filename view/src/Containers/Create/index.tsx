@@ -17,7 +17,7 @@ import { sendQuestionData, saveQuestionId, getSavedQuestionId } from "../../Util
 import Navbar from "../../Components/NavBar";
 import styles from './create.module.css';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import { DateTimePicker, DesktopDatePicker, DesktopDateTimePicker, DesktopTimePicker, LocalizationProvider, MobileDateTimePicker } from "@mui/lab";
+import { DesktopDateTimePicker, LocalizationProvider, MobileDateTimePicker } from "@mui/lab";
 
 interface StateProps {
     question: string;

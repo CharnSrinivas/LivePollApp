@@ -1,5 +1,6 @@
-import server from './app/server'
 import env from 'dotenv'
-import path from 'path'
+import path from 'path';
 env.config({ path: path.join(__dirname, '.env') });
-server();
+import('./app/server').then(server_module => {
+    server_module.default()
+})

@@ -3,6 +3,7 @@ import styles from './signin.module.css';
 import { TextField, Button, Slide, Alert, InputAdornment } from '@mui/material'
 import Navbar from '../../Components/NavBar';
 import { SERVER_URL } from '../../config';
+import { setIsAuth } from '../../Utils/utils';
 
 export const Signin = () => {
     const [user_name, setUserName] = useState('')
@@ -92,7 +93,12 @@ export const Signin = () => {
                         setOpenAlert(true); setAlertSeverity('warning'); setAlertText(res_json.msg); setRetypedPasswordFieldError(true);
                         return;
                     }
-                    setOpenAlert(true); setAlertSeverity('success'); setAlertText(res_json.msg); setAlertTitle('Success'); setRetypedPasswordFieldError(true);
+                    setOpenAlert(true); 
+                    setAlertSeverity('success'); 
+                    setAlertText(res_json.msg); 
+                    setAlertTitle('Success'); 
+                    setIsAuth(true);
+                    window.location.href = '/dashboard'
                 }
 
             })

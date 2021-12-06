@@ -3,6 +3,7 @@ import styles from './signup.module.css';
 import { TextField, Button, Slide, Alert, InputAdornment } from '@mui/material'
 import Navbar from '../../Components/NavBar';
 import { SERVER_URL } from '../../config';
+import { setIsAuth } from '../../Utils/utils';
 export const Signin = () => {
     const [user_name, setUserName] = useState('')
     const [password, setPassword] = useState('')
@@ -57,7 +58,7 @@ export const Signin = () => {
 
         return true;
     }
-    const signUn = () => {
+    const signUp = () => {
         setOpenAlert(false);
         setUserNameFieldError(false);
         setPasswordFieldError(false);
@@ -78,7 +79,12 @@ export const Signin = () => {
                         setOpenAlert(true); setAlertSeverity('warning'); setAlertText(res_json.msg);
                         return;
                     }
-                    setOpenAlert(true); setAlertSeverity('success'); setAlertText(res_json.msg); setAlertTitle('Success');
+                    setOpenAlert(true);
+                    setAlertSeverity('success');
+                    setAlertText(res_json.msg);
+                    setAlertTitle('Success');
+                    setIsAuth(true);
+                    window.location.href = '/dashboard'
                 }
 
             })
@@ -150,7 +156,7 @@ export const Signin = () => {
 
                     </div>
                     <div>
-                        <Button onClick={signUn} sx={{ textTransform: 'none' }} variant='contained' size='medium'>Sign In</Button>
+                        <Button onClick={signUp} sx={{ textTransform: 'none' }} variant='contained' size='medium'>Sign In</Button>
                         <a href="signin">I don't have an account? Create one</a>
                     </div>
                 </div>

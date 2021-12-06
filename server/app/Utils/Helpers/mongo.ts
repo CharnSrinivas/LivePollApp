@@ -1,4 +1,4 @@
-import { MongoClient, Db, InsertOneResult, UpdateResult } from 'mongodb';
+import { MongoClient, Db, InsertOneResult, UpdateResult, Document, ObjectId } from 'mongodb';
 import { DB_USERS_COLL_NAME } from '../../../config';
 import { DbQuestion, Question as QuestionInterface, Option, DbVote } from '../models/db_models';
 const DB_Name = 'LivePollApp';
@@ -38,12 +38,26 @@ class MongoHelper {
             }
         })
     }
-
+    public fetchQuestionCreatedByUser(user_name: String):Promise<Document[]> {
+        return new Promise((resolve, reject) => {
+            try {
+                if (!this.db) {
+                    console.log('createNewPoll Db is undefined')
+                    reject('fetchQuestionCreatedByUser Db id undefined.'); return;
+                }
+                this.db.collection(LivePollsCollectionName).find({ created_by: user_name }).project({_id:0})
+                .toArray()
+                    .then(question_list => resolve(question_list))
+            } catch (err) {
+                reject(err);
+            }
+        })
+    }
     public createNewPoll(question: QuestionInterface): Promise<InsertOneResult> {
         return new Promise((resolve, reject) => {
             if (!this.db) {
                 console.log('createNewPoll Db is undefined')
-                reject('createNewPoll Db id undefined.');return;
+                reject('createNewPoll Db id undefined.'); return;
             }
             let options: Option[] = [];
             question.options.forEach((opt, index) => {
@@ -51,13 +65,69 @@ class MongoHelper {
             })
 
             let _question: DbQuestion = { ...question, votes: [], options: options };
-            this.db.collection(LivePollsCollectionName).createIndex({'expire_at':1},{expireAfterSeconds:0});
+            this.db.collection(LivePollsCollectionName).createIndex({ 'expire_at': 1 }, { expireAfterSeconds: 0 });
             this.db.collection(LivePollsCollectionName).insertOne(_question).then((doc) => {
                 resolve(doc);
             })
         })
     }
 
+    /* public addShare(question_id: string):Promise<UpdateResult> {
+        return new Promise((res, rej) => {
+            try {
+                if (!this.db) {
+                    console.log('\ncreateNewPoll Db is undefined\n')
+                    rej('addShare Db id undefined.'); return;
+                }
+                this.db.collection(LivePollsCollectionName)
+                    .updateOne({
+                        'question_id': question_id
+                    }, {
+                        $inc: { 'shares': 1 }
+                    }).then(result => {
+                        res(result);
+                    }).catch(err=>rej(err));
+            } catch (error) {
+                rej(error);
+            }
+        })
+    } */
+
+    public addVisit(question_id: string, ip_addr: string): Promise<{ msg: string, error: boolean }> {
+        return new Promise((res, rej) => {
+            try {
+                if (!this.db) {
+                    console.log('\ncreateNewPoll Db is undefined\n')
+                    res({ error: true, msg: 'addVisit Db id undefined.' }); return;
+                }
+                this.db.collection(LivePollsCollectionName).findOne(
+                    {
+                        'question_id': question_id,
+                        'visits': ip_addr
+                    },
+                    (err, document) => {
+                        if (err) { rej(err); return }
+                        if (document) { res({ error: true, msg: "Already visited." }); return; }
+
+                        this.db!.collection(LivePollsCollectionName)
+                            .updateOne(
+                                {
+                                    'question_id': question_id
+                                },
+                                {
+                                    $inc: { 'no_of_visits': 1 }, $addToSet: { 'visits': ip_addr }
+                                }
+                            ).then(result => {
+                                res({ error: false, msg: 'success' });
+                            }).catch(err => rej(err));
+                    }
+                )
+
+            } catch (error) {
+                rej(error);
+            }
+        })
+    }
     public voteToQuestion(question_id: string, opt_index: number, req_ip_addr: string,): Promise<UpdateResult> {
         return new Promise((res, rej) => {
             if (!this.db) {
@@ -122,16 +192,16 @@ class MongoHelper {
         })
     }
 
-    public findUser(id: string) {
+    public findUser(_id: string | ObjectId): Promise<Document | null | undefined> {
         return new Promise((res, rej) => {
             if (!this.db) {
                 console.error('findUser  db is undefined')
                 rej('db is undefined');
             }
             try {
-                this.db!.collection(DB_USERS_COLL_NAME).findOne({ 'id': id }, function (err, doc) {
+                this.db!.collection(DB_USERS_COLL_NAME).findOne({ '_id': _id }, function (err, doc) {
                     if (err) rej(err);
-                    if (!doc) { rej('Invalid question id!') }
+                    if (!doc) { rej('User not found.') }
                     res(doc)
                 })
             }

@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import Navbar from "../../Components/NavBar";
+import { SERVER_URL } from "../../config";
 import { getQuestionData, isMobile, timeAgo, vote as voteToQuestion } from "../../Utils/utils";
 import styles from './vote.module.css';
 interface StateProps {
@@ -39,7 +40,7 @@ export default class Vote extends React.Component<{}, StateProps> {
         }
 
     };
-    updatePollData = () => {
+    fetchUpdatePollData = () => {
         if (!this.poll_id) return;
         getQuestionData(this.poll_id).then(res => {
             if (res.status !== 200) {
@@ -55,11 +56,11 @@ export default class Vote extends React.Component<{}, StateProps> {
         this.poll_id = new URLSearchParams(window.location.search).get('id');
         if (!this.poll_id) {
             let props = this.props as any;
-            props.history.push(`\\home`);
+            window.location.href = '/home'
             return;
         }
-        this.updatePollData();
-
+        this.fetchUpdatePollData();
+        fetch(`${SERVER_URL}/add_visit?question_id=${this.poll_id}`,{credentials:'include',mode:'cors',method:'GET'}).then(res=>console.log(res)).catch(err=>console.error(err))
     }
     vote = () => {
         if (this.state.vote_option < 0 || !this.poll_id) return;
@@ -82,8 +83,6 @@ export default class Vote extends React.Component<{}, StateProps> {
                         let updated_poll_data = this.state.poll_data;
                         updated_poll_data.options[this.state.vote_option].no_of_polls += 1;
                         updated_poll_data.total_votes += 1;
-                        console.log(this.state.poll_data, updated_poll_data);
-
                         this.setState(
                             {
                                 show_alert: true,
@@ -92,7 +91,7 @@ export default class Vote extends React.Component<{}, StateProps> {
                                 alert_title: 'Success!', poll_data: updated_poll_data
                             })
                             ;
-                        // this.updatePollData();
+                        this.fetchUpdatePollData();
                     })
 
                 }).catch(err => { console.error(err) })
@@ -123,7 +122,7 @@ export default class Vote extends React.Component<{}, StateProps> {
                                 <p className={styles['title']}>{this.state.poll_data.question_title}</p>
                                 <div className={styles['question']}>
                                     <p>{this.state.poll_data.question}</p>
-                                    <p>Asked by <b>Uncle bob </b>{timeAgo(new Date(this.state.poll_data.created_time))}</p>
+                                    <p>Asked by <b>{this.state.poll_data.created_by ?? 'Guest'} </b>{timeAgo(new Date(this.state.poll_data.created_time))}</p>
                                 </div>
                                 <div className={styles['options-container']}>
                                     {
