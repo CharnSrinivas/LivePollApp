@@ -2,7 +2,7 @@ view/node_modules
 server/node_modules
 
 
-view/build
+#view/build
 server/build
 
 server/.env
