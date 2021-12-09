@@ -15,7 +15,7 @@ export default async function main() {
     app.get('/',(req,res)=>{res.send('<h1>This is api for live poll app </h1>')})
     app.use(express.json(), cookie_parser, cors({
         origin:
-            ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://0.0.0.0:3000', 'http://192.168.42.13:3000']
+            ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://0.0.0.0:3000', 'http://192.168.42.13:3000','https://live-poll-app.herokuapp.com']
         , credentials: true,
     }), PollRouter, auth_router.default, general_router.default)
 
