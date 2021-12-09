@@ -6,7 +6,6 @@ const url = 'mongodb+srv://charan:admin@cluster.mnp3q.mongodb.net/myFirstDatabas
 
 // 'mongodb://127.0.0.1:27017'
 const LivePollsCollectionName = 'LivePolls'
-
 class MongoHelper {
     public client: MongoClient | undefined;
     public db: Db | undefined;
@@ -33,15 +32,15 @@ class MongoHelper {
             }
         })
     }
-    public fetchQuestionCreatedByUser(user_name: String):Promise<Document[]> {
+    public fetchQuestionCreatedByUser(user_name: String): Promise<Document[]> {
         return new Promise((resolve, reject) => {
             try {
                 if (!this.db) {
                     console.log('createNewPoll Db is undefined')
                     reject('fetchQuestionCreatedByUser Db id undefined.'); return;
                 }
-                this.db.collection(LivePollsCollectionName).find({ created_by: user_name }).project({_id:0})
-                .toArray()
+                this.db.collection(LivePollsCollectionName).find({ created_by: user_name }).project({ _id: 0 })
+                    .toArray()
                     .then(question_list => resolve(question_list))
             } catch (err) {
                 reject(err);
