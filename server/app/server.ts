@@ -3,7 +3,7 @@ import MongoHelper from './Utils/Helpers/mongo';
 import PollRouter from './Routes/polls';
 import cors from 'cors'
 import { cookie_parser } from './middlewares';
-const PORT = 5000;
+const PORT =process.env.PORT|| 5000;
 const app = express();
 
 export const jwt_secret_key = process.env['SECRET_KEY'] || '123466789';
