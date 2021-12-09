@@ -1,0 +1,15 @@
+@keyframes top {
+  0%{
+    transform: rotate(0deg);
+  }
+  50%{
+    transform: rotate(8deg);
+  }
+  100%{
+    transform: rotate(0deg);
+  }
+}
+
+#top{
+    animation: top 1s ease  infinite; 
+}

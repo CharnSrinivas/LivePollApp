@@ -26,24 +26,27 @@ auth_router.post('/register', (req, res) => {
                     bcrypt.hash(body.password, 12)
                         .then((password) => {
                             const user: User = {
-                                username: body.username, password: password, polls_ids: [],xp:0
+                                username: body.username, password: password, polls_ids: [], xp: 0
                             }
                             users_coll.insertOne(user, (err, user_document) => {
                                 if (err) {
                                     res.statusCode = 500;
                                     res.statusMessage = err.name + "  : " + err.message;
-                                    res.json({error:true,msg:err.name + "  : " + err.message}).end();return;
+                                    res.json({ error: true, msg: err.name + "  : " + err.message }).end(); return;
                                 }
-                                if(!user_document){
+                                if (!user_document) {
                                     res.statusCode = 500;
-                                    res.json({error:true,msg:"Inserted document is empty."}).end();
+                                    res.json({ error: true, msg: "Inserted document is empty." }).end();
                                     return;
                                 }
                                 const _id = user_document.insertedId.toString()
-                                
+
                                 const token = jwt.sign(_id, jwt_secret_key);
                                 res.statusCode = 200;
-                                res.cookie('auth-token', token, { sameSite: 'none', secure: true });
+                                // ?Cookie expires after 6 months
+                                let date = new Date();
+                                date.setMonth(date.getMonth() + 6);
+                                res.cookie('auth-token', token, { sameSite: 'none', secure: true, expires: date });
                                 res.json({ error: false, msg: "Signed Up successfully!" }); return;
                             })
                         })
@@ -64,32 +67,34 @@ auth_router.post('/register', (req, res) => {
 })
 
 
-auth_router.get('/is_auth',verifyUser,(req,res)=>{
-    res.json({error:false,is_auth:true})
+auth_router.get('/is_auth', verifyUser, (req, res) => {
+    res.json({ error: false, is_auth: true })
 })
 
-auth_router.post('/login',  (req, res) => {
+auth_router.post('/login', (req, res) => {
 
     const body = req.body as Login;
 
-        users_coll.findOne({ username: body.username }).then((user) => {
-            if (user) {
-                res.statusCode = 200;
-                const user_id = user._id.toString();
-                const token = jwt.sign(user_id, jwt_secret_key);
-                res.cookie('auth-token', token, { sameSite: 'none', secure: true });
-                res.json({ error: false, msg: "Signed Up successfully!" }); return;
-            } else {
-                res.statusCode = 400;
-                res.statusMessage = "Invalid username or password";
-                res.json({ error: true, msg: "Invalid email or password" }); return;
-            }
-        }).catch(err =>{
-    console.log(err);
+    users_coll.findOne({ username: body.username }).then((user) => {
+        if (user) {
+            res.statusCode = 200;
+            const user_id = user._id.toString();
+            const token = jwt.sign(user_id, jwt_secret_key);
+            let date = new Date();
+            date.setMonth(date.getMonth() + 6);
+            res.cookie('auth-token', token, { sameSite: 'none', secure: true, expires: date });
+            res.json({ error: false, msg: "Signed Up successfully!" }); return;
+        } else {
+            res.statusCode = 400;
+            res.statusMessage = "Invalid username or password";
+            res.json({ error: true, msg: "Invalid email or password" }); return;
+        }
+    }).catch(err => {
+        console.log(err);
         res.statusCode = 500;
         res.statusMessage = "Internal server error";
         res.json({ error: true, msg: 'Cookies is manipulated!' }); return;
-        })
+    })
 
 })
 

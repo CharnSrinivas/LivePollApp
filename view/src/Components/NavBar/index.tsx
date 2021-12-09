@@ -46,11 +46,11 @@ export default function Navbar() {
                                 {!getIsAuth() &&
                                     <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} spacing={4} sx={{ marginLeft: '500px' }}>
                                         <Typography sx={{ font: 'inherit' }} variant='body1'>
-                                            <a href={'/signin'} style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
-                                                Sign In
+                                            <a href={'/signup'} style={{ color: 'inherit', textDecoration: 'none', font: 'inherit' }}>
+                                                Sign up
                                             </a>
                                         </Typography>
-                                        <Button href='#' onClick={() => { window.location.href = '/signup' }} variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign Up</Button>
+                                        <Button href='#' onClick={() => { window.location.href = '/singin' }} variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign in</Button>
                                     </Stack>
                                 }
                             </Stack>

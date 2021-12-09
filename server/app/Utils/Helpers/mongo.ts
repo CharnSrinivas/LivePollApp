@@ -2,15 +2,10 @@ import { MongoClient, Db, InsertOneResult, UpdateResult, Document, ObjectId } fr
 import { DB_USERS_COLL_NAME } from '../../../config';
 import { DbQuestion, Question as QuestionInterface, Option, DbVote } from '../models/db_models';
 const DB_Name = 'LivePollApp';
-const url = 'mongodb://127.0.0.1:27017'
-// 'mongodb+srv://charan:admin@cluster.mnp3q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const url = 'mongodb+srv://charan:admin@cluster.mnp3q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+
+// 'mongodb://127.0.0.1:27017'
 const LivePollsCollectionName = 'LivePolls'
-
-/*
-use LivePollApp
-db.LivePolls.find().pretty()
-*/
-
 
 class MongoHelper {
     public client: MongoClient | undefined;

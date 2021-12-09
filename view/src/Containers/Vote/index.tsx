@@ -55,7 +55,6 @@ export default class Vote extends React.Component<{}, StateProps> {
     componentDidMount() {
         this.poll_id = new URLSearchParams(window.location.search).get('id');
         if (!this.poll_id) {
-            let props = this.props as any;
             window.location.href = '/home'
             return;
         }

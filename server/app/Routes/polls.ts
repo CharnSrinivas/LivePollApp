@@ -17,7 +17,6 @@ router.get(
                 console.error(err);
                 res.statusCode = 400; res.json({ error: false, msg: "Success" }).end(); return;
             })
-
     }
 )
 router.post(
@@ -107,7 +106,7 @@ router.post(
     function (req: Request, res: Response) {
         const data = req.body;
 
-        if (!(data.options && data.question && data.question_description && data.question_title)) {
+        if (!(data.options && data.question &&  data.question_title)) {
             res.statusCode = 400; // ? ==================> 400 Bad Request <==================
             res.send('Insufficient data!'); return;
         }
@@ -120,7 +119,6 @@ router.post(
         const _req = req as any;
         const user_data = _req.user as User;
         var created_by = null;
-        console.log(user_data);
 
         if (user_data) {
             created_by = user_data.username
@@ -131,7 +129,7 @@ router.post(
             question: data.question,
             question_id: question_id,
             total_votes: 0,
-            question_description: data.question_description,
+            question_description: data.question_description ? data.question_description : null,
             question_title: data.question_title,
             created_date: new Date().toLocaleDateString(),
             expire_at: data.expire_at ? new Date(data.expire_at) : null,

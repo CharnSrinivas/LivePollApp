@@ -28,7 +28,6 @@ class App extends React.Component {
   componentDidMount() {
       fetch(`${SERVER_URL}/is_auth`, { method: 'GET', credentials: 'include', mode: 'cors' }).then(fetch_res => fetch_res.json()).then(res_json => {
         const is_auth = res_json.is_auth;
-        console.log(res_json);
         setAuth(is_auth);
       }).catch(err=>{console.error(err)})
     

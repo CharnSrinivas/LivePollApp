@@ -288,7 +288,7 @@ export default class Create extends React.Component<{}, StateProps>{
                         }
                     </div>
                     <div className={styles['right']}>
-                        <img src="media/create_illustration.svg" alt="create_illustration"></img>
+                        <img src="media/illustrations/create_illustration.svg" alt="create_illustration"></img>
                     </div>
                 </div>
                 <Snackbar

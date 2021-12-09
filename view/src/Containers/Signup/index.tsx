@@ -4,7 +4,7 @@ import { TextField, Button, Slide, Alert, InputAdornment } from '@mui/material'
 import Navbar from '../../Components/NavBar';
 import { SERVER_URL } from '../../config';
 import { setIsAuth } from '../../Utils/utils';
-export const Signin = () => {
+export const Signup = () => {
     const [user_name, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [openAlert, setOpenAlert] = useState(false);
@@ -63,6 +63,8 @@ export const Signin = () => {
         setUserNameFieldError(false);
         setPasswordFieldError(false);
         if (!validFields()) return;
+        console.log("Ha coming");
+        
         fetch(`${SERVER_URL}/login`, {
             method: "POST", body: JSON.stringify(
                 {
@@ -165,4 +167,4 @@ export const Signin = () => {
     )
 }
 
-export default Signin
+export default Signup

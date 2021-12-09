@@ -44,7 +44,7 @@ export default class Home extends React.Component<{}, StateProps> {
     componentDidMount() {
         const container = document.getElementById('top-right-container');
         if (container) {
-            fetch('media/charts_illustration.svg').then(res => {
+            fetch('media/illustrations/charts_illustration.svg').then(res => {
                 res.text().then(svg => {
                     container.innerHTML += svg;
                 })
@@ -67,7 +67,7 @@ export default class Home extends React.Component<{}, StateProps> {
                             alignItems={'center'}
                             spacing={2}>
                             <Stack className={styles['create-container']} spacing={2}>
-                                <LazyImage alt='create' src='media/create.png'></LazyImage>
+                                <LazyImage alt='create' src='media/images/create.png'></LazyImage>
                                 <p id='some'>
                                     Create <b style={{ color: 'var(--primary)', letterSpacing: '1px', fontSize: 'inherit' }}>Live Polls</b> in no time.
                                 </p>
@@ -76,7 +76,7 @@ export default class Home extends React.Component<{}, StateProps> {
                             </Stack>
                             <i color='primary'>OR</i>
                             <Stack className={styles['join-container']} spacing={2}>
-                                <LazyImage alt='vote' src='media/vote.png'></LazyImage>
+                                <LazyImage alt='vote' src='media/images/vote.png'></LazyImage>
                                 <p >Vote to existing poll(s) created by others.</p>
                                 <p>By entering poll id.</p>
                                 <Button 
@@ -94,19 +94,19 @@ export default class Home extends React.Component<{}, StateProps> {
                             <Typography variant='h4' sx={{ color: 'var(--font-color)' }}>Features</Typography>
                             <Stack direction={'row'} className={styles['features-container']} alignItems={'center'} justifyContent={'center'}>
                                 <div>
-                                    <LazyImage src='media/free.png' alt='free' ></LazyImage>
+                                    <LazyImage src='media/images/free.png' alt='free' ></LazyImage>
                                     <Typography variant='h5' color={'var(--font-color)'}>Free</Typography>
                                     <span></span>
                                     <p>Save money! All our polls are 100% free to create and monitor.</p>
                                 </div>
                                 <div>
-                                    <LazyImage src='media/clock.png' alt='clock' ></LazyImage>
+                                    <LazyImage src='media/images/clock.png' alt='clock' ></LazyImage>
                                     <Typography variant='h5' color={'var(--font-color)'}>Real Time</Typography>
                                     <span></span>
                                     <p>All our polls are live and up to date. You can monitor your live polls with our any refreshing.</p>
                                 </div>
                                 <div>
-                                    <LazyImage src='media/shield.png' alt='shield' ></LazyImage>
+                                    <LazyImage src='media/images/shield.png' alt='shield' ></LazyImage>
                                     <Typography variant='h5' color={'var(--font-color)'}>Safe & Secure</Typography>
                                     <span></span>
                                     <p>We use latest technology to prevent any type of malicious things.We also prevent duplicate votes.</p>
