@@ -50,7 +50,7 @@ export default function Navbar() {
                                                 Sign up
                                             </a>
                                         </Typography>
-                                        <Button href='#' onClick={() => { window.location.href = '/singin' }} variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign in</Button>
+                                        <Button href='#' onClick={() => { window.location.href = '/signin' }} variant='contained' sx={{ textTransform: 'none' }} size='small'>Sign in</Button>
                                     </Stack>
                                 }
                             </Stack>

@@ -1,13 +1,17 @@
 {
+  "homepage": "https://CharnSrinivas.github.io/LivePollApp",
   "name": "livepollapp",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "dev-server": "nodemon server/index.ts",
-    "dev-view": "cd view && npm start"
+    "dev-view": "cd view && npm start",
+    "predeploy": "cd view && npm run build",
+    "deploy": "gh-pages -d build -e view"
   },
-  "author": "",
+  "author": "Charan Srinivas",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "gh-pages": "^3.2.3"
+  }
 }
