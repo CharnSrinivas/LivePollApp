@@ -1,6 +1,6 @@
 <p align="center">
 
-<img src="https://github.com/CharnSrinivas/LivePollApp/blob/main/view/public/media/Logo.svg?raw=true" width="250" margin="50vw auto" alt="accessibility text">
+<img src="https://github.com/CharnSrinivas/LivePollApp/blob/main/view/public/media/icons/Logo.svg?raw=true" width="250" margin="50vw auto" alt="accessibility text">
 </p>
 
 # Live Poll App
