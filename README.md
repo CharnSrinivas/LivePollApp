@@ -4,7 +4,7 @@
 </p>
 
 # Live Poll App
-
+## Check out app on <a href="https://live-poll-app-server.herokuapp.com"/>Live poll app</a>
 ### Features
 
 - All our polls are live and up to date. You can monitor your live polls with our any refreshing.
