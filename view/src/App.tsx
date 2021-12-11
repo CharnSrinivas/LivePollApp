@@ -32,7 +32,8 @@ class App extends React.Component {
       }).catch(err=>{console.error(err)})
     
     this.handleFontSize()
-    window.addEventListener('resize', this.handleFontSize)
+    window.addEventListener('resize', this.handleFontSize);
+    console.log(process.env)
   }
 
   handleFontSize = () => {

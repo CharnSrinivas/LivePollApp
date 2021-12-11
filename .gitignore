@@ -2,8 +2,8 @@ view/node_modules
 server/node_modules
 
 
-#view/build
-server/build
+view/build
+server/dist
 
 server/.env
 view/.env
