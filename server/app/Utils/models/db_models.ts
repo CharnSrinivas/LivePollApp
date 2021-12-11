@@ -30,7 +30,7 @@ export interface Question{
 }
 export interface DbVote{
     created_time:Date;
-    ip_addr:string;
+    ip_addr:string|null;
     name:string;
     option_index:number;
         

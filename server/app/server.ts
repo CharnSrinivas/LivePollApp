@@ -19,11 +19,6 @@ export default async function main() {
 
     app.get('/', (req, res) => {
         res.send('<h1>This is api for live poll app </h1>');
-        console.log("\n +++++++++++++++++++ Ip address +++++++++++++");
-        console.log(getClientIp(req));
-        console.log(req.ip);
-        console.log(req.socket.remoteAddress)
-        console.log("\n +++++++++++++++++++ Ip address +++++++++++++\n");
     }
     )
 

@@ -122,7 +122,7 @@ class MongoHelper {
             }
         })
     }
-    public voteToQuestion(question_id: string, opt_index: number, req_ip_addr: string,): Promise<UpdateResult> {
+    public voteToQuestion(question_id: string, opt_index: number, req_ip_addr: string|null,): Promise<UpdateResult> {
         return new Promise((res, rej) => {
             if (!this.db) {
                 console.error('updatePoll db is undefined')
@@ -153,8 +153,6 @@ class MongoHelper {
     public isVotedToPoll = (question_id: string, ip_addr: string): Promise<boolean> => {
         return new Promise((res, rej) => {
             this.db!.collection(LivePollsCollectionName).find({ "question_id": question_id, "votes.ip_addr": ip_addr }).project({ votes: 0, _id: 0 }).toArray().then(data => {
-                console.log(data);
-
                 if (!data) { res(false); return; }
                 if (data.length > 0) {
                     res(true); return;

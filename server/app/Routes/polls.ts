@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { getClientIp } from "request-ip";
 import { getUserData, verifyUser } from "../middlewares";
 import mongo from "../Utils/Helpers/mongo";
 import { User } from "../Utils/models/db_models";
@@ -23,12 +24,22 @@ router.post(
     '/check_vote',
     function (req: Request, res: Response) {
         let data = req.body;
-        let ip_addr = req.connection.remoteAddress || req.socket.remoteAddress as string;
-        if (data.question_id, ip_addr) {
-            mongo.isVotedToPoll(data.question_id, ip_addr.toString()).then(is_voted => {
-                res.json({ is_voted, ip_addr: ip_addr.toString() }); return
-            }).catch(err => { res.statusCode = 500; res.json({ error: true, msg: err }).end() })
+        let ip_addr = getClientIp(req);
+        if (ip_addr) {
+            if (data.question_id) {
+                mongo.isVotedToPoll(data.question_id, ip_addr).then(is_voted => {
+                    res.json({ is_voted }).end(); return
+                }).catch(err => { res.statusCode = 500; res.json({ error: true, msg: err }).end(); return; })
+            } else {
+                res.statusCode = 401;
+                res.json({ error: true, msg: "Question id is not found." }).end()
+                return;
+            }
         }
+
+        // ? ==> if ip address stored as null or not found considering it as not voted. <==
+
+        res.json({ is_voted: false }).end(); return;
     }
 )
 
@@ -44,7 +55,7 @@ router.post(
 ) */
 router.get('/add_visit', (req, res) => {
     try {
-        let ip_addr = req.connection.remoteAddress || req.socket.remoteAddress as string;
+        let ip_addr = getClientIp(req);
         let question_id = req.query['question_id'] as string;
         if (!ip_addr) { res.statusCode = 500; res.json({ error: true, msg: "Unable to get remote ip_address from request." }).end(); return; }
         if (!question_id) { res.statusCode = 401; res.json({ error: true, msg: "Invalid query parameters." }).end(); return; }
@@ -70,16 +81,18 @@ router.get(
     async function (req: Request, res: Response) {
         let query_parms = req.query;
 
-        let ip_addr = req.connection.remoteAddress || req.socket.remoteAddress as string;
+        let ip_addr = getClientIp(req);
         if (!(query_parms.question_id && query_parms.option_index)) {
             res.statusCode = 400;
             res.json({ msg: 'Invalid query parameters 1!' });
             return;
         }
         try {
-            let is_already_voted = await mongo.isVotedToPoll(query_parms.question_id as string, ip_addr);
-            if (is_already_voted) {
-                res.statusCode = 400; res.json({ is_already_voted: true }).end(); return
+            if (ip_addr) {
+                let is_already_voted = await mongo.isVotedToPoll(query_parms.question_id as string, ip_addr);
+                if (is_already_voted) {
+                    res.statusCode = 400; res.json({ is_already_voted: true }).end(); return
+                }
             }
         } catch (error) {
             res.statusCode = 500; res.json({ error: error }).end()
@@ -93,7 +106,7 @@ router.get(
             return;
         }
         let question_id = query_parms.question_id as string;
-        mongo.voteToQuestion(question_id, option_index, ip_addr.toString()).then(doc_update_result => {
+        mongo.voteToQuestion(question_id, option_index, ip_addr).then(doc_update_result => {
             res.send().end()
         }).catch(err => {
             res.statusCode = 500; res.send(err); return;
@@ -106,7 +119,7 @@ router.post(
     function (req: Request, res: Response) {
         const data = req.body;
 
-        if (!(data.options && data.question &&  data.question_title)) {
+        if (!(data.options && data.question && data.question_title)) {
             res.statusCode = 400; // ? ==================> 400 Bad Request <==================
             res.send('Insufficient data!'); return;
         }
