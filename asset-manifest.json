@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "./static/css/main.23f0f42d.chunk.css",
-    "main.js": "./static/js/main.7800ef96.chunk.js",
-    "main.js.map": "./static/js/main.7800ef96.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.4370c5f9.js",
-    "runtime-main.js.map": "./static/js/runtime-main.4370c5f9.js.map",
-    "static/js/2.887271ab.chunk.js": "./static/js/2.887271ab.chunk.js",
-    "static/js/2.887271ab.chunk.js.map": "./static/js/2.887271ab.chunk.js.map",
-    "index.html": "./index.html",
-    "static/css/main.23f0f42d.chunk.css.map": "./static/css/main.23f0f42d.chunk.css.map",
-    "static/js/2.887271ab.chunk.js.LICENSE.txt": "./static/js/2.887271ab.chunk.js.LICENSE.txt"
+    "main.css": "./LivePollApp/static/css/main.23f0f42d.chunk.css",
+    "main.js": "./LivePollApp/static/js/main.7800ef96.chunk.js",
+    "main.js.map": "./LivePollApp/static/js/main.7800ef96.chunk.js.map",
+    "runtime-main.js": "./LivePollApp/static/js/runtime-main.60f1a618.js",
+    "runtime-main.js.map": "./LivePollApp/static/js/runtime-main.60f1a618.js.map",
+    "static/js/2.887271ab.chunk.js": "./LivePollApp/static/js/2.887271ab.chunk.js",
+    "static/js/2.887271ab.chunk.js.map": "./LivePollApp/static/js/2.887271ab.chunk.js.map",
+    "index.html": "./LivePollApp/index.html",
+    "static/css/main.23f0f42d.chunk.css.map": "./LivePollApp/static/css/main.23f0f42d.chunk.css.map",
+    "static/js/2.887271ab.chunk.js.LICENSE.txt": "./LivePollApp/static/js/2.887271ab.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.4370c5f9.js",
+    "static/js/runtime-main.60f1a618.js",
     "static/js/2.887271ab.chunk.js",
     "static/css/main.23f0f42d.chunk.css",
     "static/js/main.7800ef96.chunk.js"
