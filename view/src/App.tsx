@@ -4,7 +4,7 @@ import Vote from './Containers/Vote';
 import Create from './Containers/Create';
 import SignIn from './Containers/Signin'
 import SignUp from './Containers/Signup'
-import Dashboard from './Containers/Dashboard'
+import Dashboard from './Containers/Dashboard/'
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import { primary_color, secondary_color, Min_Percentage_of_FontSize, SERVER_URL } from './config';
@@ -24,16 +24,13 @@ class App extends React.Component {
       }
     }
   })
-
   componentDidMount() {
-      fetch(`${SERVER_URL}/is_auth`, { method: 'GET', credentials: 'include', mode: 'cors' }).then(fetch_res => fetch_res.json()).then(res_json => {
-        const is_auth = res_json.is_auth;
-        setAuth(is_auth);
-      }).catch(err=>{console.error(err)})
-    
+    fetch(`${SERVER_URL}/is_auth`, { method: 'GET', credentials: 'include', mode: 'cors' }).then(fetch_res => fetch_res.json()).then(res_json => {
+      const is_auth = res_json.is_auth;
+      setAuth(is_auth);
+    }).catch(err => { console.error(err) })
     this.handleFontSize()
     window.addEventListener('resize', this.handleFontSize);
-    console.log(process.env)
   }
 
   handleFontSize = () => {
@@ -46,23 +43,20 @@ class App extends React.Component {
       }
     }
   }
-
-
-  render(): React.ReactNode {
+  render() {
     return (
       <ThemeProvider theme={this.theme} >
 
         <Router>
           <Switch>
-              <Route path={'/vote'} component={Vote}></Route>
-            <Route path={'/share/vote' }   component={Vote}></Route>
+            <Route path={'/vote'} component={Vote}></Route>
+            <Route path={'/share/vote'} component={Vote}></Route>
             <Route exact path={'/create'} component={Create}></Route>
-             <Route exact path={'/signin'} component={SignIn}></Route>
+            <Route exact path={'/signin'} component={SignIn}></Route>
             <Route exact path={'/signup'} component={SignUp}></Route>
-              <Route exact path={'/dashboard'} component={Dashboard}></Route>
+            <Route exact path={'/dashboard'} component={Dashboard}></Route>
             <Route exact path={'/home'} component={Home}></Route>
             <Route exact path={'/'} component={Home}></Route>
-
           </Switch>
         </Router>
 
@@ -71,5 +65,4 @@ class App extends React.Component {
     );
   }
 }
-
 export default App;

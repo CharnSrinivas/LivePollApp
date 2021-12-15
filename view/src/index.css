@@ -7,6 +7,12 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+#circular-loader{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform:translate(-50%,-50%) ;
+}
 
 :root {
     --primary: hsl(279, 80%, 49%);

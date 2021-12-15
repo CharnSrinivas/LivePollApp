@@ -1,0 +1,13 @@
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "type": "node",
+            "name": "Attach Node Debugger",
+            "request": "attach",
+            "sourceMaps": true,
+            "restart": true,
+          
+        }
+    ]
+}
