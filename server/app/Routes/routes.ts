@@ -24,4 +24,8 @@ router.get('/dashboard', verifyUser, (req, res) => {
     })
 })
 
+router.get('/', (req, res) => {
+
+})
+
 export default router;

@@ -19,6 +19,9 @@ import styles from './create.module.css';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { DesktopDateTimePicker, LocalizationProvider, MobileDateTimePicker } from "@mui/lab";
 
+const Max_img_width = 300;
+const Max_img_height = 500;
+
 interface StateProps {
     question: string;
     options: string[];
@@ -34,12 +37,14 @@ interface StateProps {
     no_question_error: boolean;
     no_title_error: boolean;
     open_advance_settings: boolean;
-    expire_date: Date | null
+    expire_date: Date | null;
+    image_file: FileList | null;
 }
 
 export default class Create extends React.Component<{}, StateProps>{
 
-    constructor(props: any) {
+    constructor(props: any) 
+    {
         super(props);
         this.state = {
             question: '',
@@ -56,20 +61,24 @@ export default class Create extends React.Component<{}, StateProps>{
             no_title_error: false,
             open_advance_settings: false,
             expire_date: null,
-            window_width: window.innerWidth
+            window_width: window.innerWidth,
+            image_file: null
         }
         let options = this.state.options;
-        for (let i = 0; i < this.state.no_of_options; i++) {
+        for (let i = 0; i < this.state.no_of_options; i++) 
+        {
             options[i] = '';
         }
         this.setState({ options });
     };
+
     componentDidMount() {
         window.addEventListener('resize', () => {
             this.setState({ window_width: window.innerWidth });
         }
         )
     }
+
     addNewOptionField = () => {
         this.setState({ no_of_options: this.state.no_of_options + 1 });
         let options = this.state.options;
@@ -88,6 +97,7 @@ export default class Create extends React.Component<{}, StateProps>{
         this.setState({ options });
 
     }
+    
     getOptionFields = () => {
         const updateOptionsValues = (value: string, i: number) => {
             let options = this.state.options;
@@ -108,6 +118,30 @@ export default class Create extends React.Component<{}, StateProps>{
         });
         return arr;
 
+    }
+
+    getImageData = (): Promise<string | ArrayBuffer> => {
+        return new Promise((res, rej) => {
+            const fileList = this.state.image_file;
+            if (!fileList) { rej(); return; }
+            let reader = new FileReader();
+            reader.readAsDataURL(fileList[0]);
+            reader.onload = function () {
+                let result = reader.result;
+                if (result && typeof (result) == 'string') {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    let img = new Image();
+                    img.src = result;
+                    ctx?.drawImage(img, 0, 0, img.width, img.height);
+                    // res(result); return
+                    const ratio = Math.min(Max_img_width / img.width, Max_img_height / img.height);
+                    ctx?.scale(ratio * img.width, ratio * img.height);
+                    canvas.toDataURL();
+                }
+                rej(); return;
+            }
+        })
     }
 
     onConfirm = () => {
@@ -143,6 +177,7 @@ export default class Create extends React.Component<{}, StateProps>{
         this.setState({ submit_loading: true });
 
         let data = { options, question, question_title: title, question_description: description, expire_at: this.state.expire_date }
+        // const image_base64
         sendQuestionData(data).then(json => {
             if (json.question_id) {
                 saveQuestionId(json.question_id!)
@@ -243,24 +278,36 @@ export default class Create extends React.Component<{}, StateProps>{
                                 </div>
                             </Stack>
                             <Collapse unmountOnExit in={this.state.open_advance_settings}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    {this.state.window_width >= 780 &&
-                                        <DesktopDateTimePicker
-                                            label="Expire date"
-                                            value={this.state.expire_date}
-                                            minDateTime={new Date()}
-                                            onChange={(new_date) => { this.setState({ expire_date: new_date }) }}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />}
-                                    {this.state.window_width < 780 &&
-                                        <MobileDateTimePicker
-                                            label="Expire date"
-                                            value={this.state.expire_date}
-                                            minDateTime={new Date()}
-                                            onChange={(new_date) => { this.setState({ expire_date: new_date }) }}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />}
-                                </LocalizationProvider>
+                                <Stack direction={'column'} width={'100%'} alignItems={'flex-start'}>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        {this.state.window_width >= 780 &&
+                                            <DesktopDateTimePicker
+                                                label="Expire date"
+                                                value={this.state.expire_date}
+                                                minDateTime={new Date()}
+                                                onChange={(new_date) => { this.setState({ expire_date: new_date }) }}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />}
+                                        {this.state.window_width < 780 &&
+                                            <MobileDateTimePicker
+                                                label="Expire date"
+                                                value={this.state.expire_date}
+                                                minDateTime={new Date()}
+                                                onChange={(new_date) => { this.setState({ expire_date: new_date }) }}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />}
+                                    </LocalizationProvider>
+                                    <Tooltip title='Add image to poll.' sx={{ alignSelf: 'flex-start' }}>
+                                        <label className={styles['img-upload']}>
+                                            <div>
+                                                <svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M21.0869 15.9012V19.9012C21.0869 20.4316 20.8762 20.9403 20.5011 21.3154C20.1261 21.6905 19.6173 21.9012 19.0869 21.9012H5.08691C4.55648 21.9012 4.04777 21.6905 3.6727 21.3154C3.29763 20.9403 3.08691 20.4316 3.08691 19.9012V15.9012" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /> <path d="M17.0869 8.9012L12.0869 3.9012L7.08691 8.9012" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /> <path d="M12.0869 3.9012V15.9012" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /> </svg>
+                                                <p>Upload image</p>
+                                            </div>
+                                            <input type={'file'} accept="image/*" style={{ display: 'none' }}
+                                                onChange={(e) => { this.setState({ image_file: e.target.files }) }} />
+                                        </label>
+                                    </Tooltip>
+                                </Stack>
                             </Collapse>
                         </Stack>
                         {!this.state.submit_loading &&

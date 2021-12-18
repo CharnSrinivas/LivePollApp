@@ -1,9 +1,10 @@
 view/node_modules
 server/node_modules
-
+.vscode
 
 view/build
 server/dist
+view/dist
 
-server/.env
-view/.env
+# server/.env
+# view/.env

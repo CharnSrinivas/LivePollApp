@@ -5,7 +5,7 @@
   "description": "",
   "scripts": {
     "dev-server": "nodemon server/index.ts",
-    "dev-view": "cd view && npm start",
+    "dev-view": "cd view && npm run start:view",
     "predeploy": "cd view && npm run build",
     "deploy": "gh-pages -d view/build -e view/"
   },

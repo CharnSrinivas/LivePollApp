@@ -1,10 +1,10 @@
 import { MongoClient, Db, InsertOneResult, UpdateResult, Document, ObjectId } from 'mongodb';
 import { DB_USERS_COLL_NAME } from '../../../config';
 import { DbQuestion, Question as QuestionInterface, Option, DbVote } from '../models/db_models';
+import { DB_URL } from '../../../config';
 const DB_Name = 'LivePollApp';
-const url = 'mongodb+srv://charan:admin@cluster.mnp3q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const url = DB_URL;
 
-// 'mongodb://127.0.0.1:27017'
 const LivePollsCollectionName = 'LivePolls'
 class MongoHelper {
     public client: MongoClient | undefined;
@@ -122,7 +122,7 @@ class MongoHelper {
             }
         })
     }
-    public voteToQuestion(question_id: string, opt_index: number, req_ip_addr: string|null,): Promise<UpdateResult> {
+    public voteToQuestion(question_id: string, opt_index: number, req_ip_addr: string | null,): Promise<UpdateResult> {
         return new Promise((res, rej) => {
             if (!this.db) {
                 console.error('updatePoll db is undefined')
@@ -152,12 +152,15 @@ class MongoHelper {
     }
     public isVotedToPoll = (question_id: string, ip_addr: string): Promise<boolean> => {
         return new Promise((res, rej) => {
-            this.db!.collection(LivePollsCollectionName).find({ "question_id": question_id, "votes.ip_addr": ip_addr }).project({ votes: 0, _id: 0 }).toArray().then(data => {
-                if (!data) { res(false); return; }
-                if (data.length > 0) {
-                    res(true); return;
-                } res(false);
-            }).catch(err => rej(err))
+            this.db!.collection(LivePollsCollectionName).find({ "question_id": question_id, "votes.ip_addr": ip_addr })
+                .project({ votes: 0, _id: 0, visits: 0, question_description: 0, options: 0 }) //* Removing unwanted data from database
+                .toArray()
+                .then(data => {
+                    if (!data) { res(false); return; }
+                    if (data.length > 0) {
+                        res(true); return;
+                    } res(false);
+                }).catch(err => rej(err))
         })
     }
     public fetchAllQuestionData() {
@@ -176,11 +179,21 @@ class MongoHelper {
                 console.error('fetchQuestionData  db is undefined')
                 rej('db is undefined');
             }
-            this.db!.collection(LivePollsCollectionName).findOne({ 'question_id': question_id }, function (err, doc) {
-                if (err) rej(err);
-                if (!doc) { rej('Invalid question id!') }
-                res(doc)
-            })
+            this.db!.collection(LivePollsCollectionName)
+                .findOne({ 'question_id': question_id },
+                    {
+                        projection: { // * removing unsafe poll data.
+                            _id: 0,
+                            votes: 0
+                        }
+                    }
+                    ,
+                    function (err, doc) {
+                        if (err) rej(err);
+                        if (!doc) { rej('Invalid question id!'); return; }
+                        delete doc._id;
+                        res(doc)
+                    })
         })
     }
 

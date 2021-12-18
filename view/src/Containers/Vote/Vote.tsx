@@ -47,7 +47,7 @@ export default class Vote extends React.Component<{}, StateProps> {
                 this.setState({ invalid_poll_id: true, data_loaded: true }); return
             };
             res.json().then(res_json => {
-                
+
                 this.setState({ poll_data: res_json, data_loaded: true });
             })
         })
@@ -59,7 +59,7 @@ export default class Vote extends React.Component<{}, StateProps> {
             return;
         }
         this.fetchUpdatePollData();
-        fetch(`${SERVER_URL}/add_visit?question_id=${this.poll_id}`,{credentials:'include',mode:'cors',method:'GET'}).then(res=>console.log(res)).catch(err=>console.error(err))
+        fetch(`${SERVER_URL}/add_visit?question_id=${this.poll_id}`, { credentials: 'include', mode: 'cors', method: 'GET' }).then(res => console.log(res)).catch(err => console.error(err))
     }
     vote = () => {
         if (this.state.vote_option < 0 || !this.poll_id) return;
@@ -79,9 +79,11 @@ export default class Vote extends React.Component<{}, StateProps> {
                             this.setState({ show_alert: true, alert_severity: 'error', alert_text: 'You had already voted to this poll.', alert_title: 'Duplicate vote!' });
                             return;
                         }
-                        let updated_poll_data = this.state.poll_data;
+                        let updated_poll_data = { ...this.state.poll_data };
                         updated_poll_data.options[this.state.vote_option].no_of_polls += 1;
                         updated_poll_data.total_votes += 1;
+                        console.log(updated_poll_data);
+                        
                         this.setState(
                             {
                                 show_alert: true,

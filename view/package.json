@@ -38,12 +38,13 @@
   },
   "scripts": {
     "build:server": "cd server && tsc ",
-    "build:view": "react-scripts build && mv build dist",
+    "build:view": "react-scripts build && cp -R build dist/build && rm -r build", 
     "test": "react-scripts test",
     "build": "npm run build:server && npm run build:view",
     "eject": "react-scripts eject",
     "start":"node dist/server/index.js",
-    "start:view":"react-scripts start"
+    "dev-view":"react-scripts start",
+    "dev-server":"nodemon server/index.ts"
   },
   "eslintConfig": {
     "extends": [

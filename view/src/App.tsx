@@ -1,3 +1,4 @@
+import { primary_color, secondary_color, Min_Percentage_of_FontSize, SERVER_URL } from './config';
 import { Switch, BrowserRouter as Router, Route } from 'react-router-dom'
 import Home from './Containers/Home';
 import Vote from './Containers/Vote';
@@ -7,7 +8,6 @@ import SignUp from './Containers/Signup'
 import Dashboard from './Containers/Dashboard/'
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-import { primary_color, secondary_color, Min_Percentage_of_FontSize, SERVER_URL } from './config';
 import { setIsAuth as setAuth } from './Utils/utils';
 import React from 'react';
 class App extends React.Component {

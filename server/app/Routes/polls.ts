@@ -80,13 +80,14 @@ router.get(
     '/vote',
     async function (req: Request, res: Response) {
         let query_parms = req.query;
-
+        //? ++++++++++++++++++++++++++ Check vote ++++++++++++++++++++++++++
         let ip_addr = getClientIp(req);
         if (!(query_parms.question_id && query_parms.option_index)) {
             res.statusCode = 400;
             res.json({ msg: 'Invalid query parameters 1!' });
             return;
         }
+        /*
         try {
             if (ip_addr) {
                 let is_already_voted = await mongo.isVotedToPoll(query_parms.question_id as string, ip_addr);
@@ -95,9 +96,9 @@ router.get(
                 }
             }
         } catch (error) {
-            res.statusCode = 500; res.json({ error: error }).end()
-        }
-
+            res.statusCode = 500; res.json({ error: true,msg:error }).end()
+        }*/
+        //? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         let option_index = parseInt(query_parms.option_index as string);
 
         if (option_index === NaN || option_index == NaN) {
@@ -107,7 +108,7 @@ router.get(
         }
         let question_id = query_parms.question_id as string;
         mongo.voteToQuestion(question_id, option_index, ip_addr).then(doc_update_result => {
-            res.send().end()
+        res.json({ error: false ,msg:"Voted successfully!"})
         }).catch(err => {
             res.statusCode = 500; res.send(err); return;
         })
