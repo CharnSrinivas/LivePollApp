@@ -21,7 +21,7 @@ const getFormattedIndexFile =
                 "Create custom online poll(s) with Live poll App for Free,And share your link to make people participate in poll.Create your poll in seconds. Ask a question, choose answers and share the link. Simple & Easy.")
             .replace(OgTitle, og_title ?? title)
             .replace(OgDescription, og_description ?? description)
-            .replace(OgImage, og_image ?? "https://" + host ?? "" + LogoPath)
+            .replace(OgImage, og_image ? og_image : "https://" + host + LogoPath)
     }
 app.get('/', (req, res, next) => {
 
@@ -38,10 +38,7 @@ app.get('/', (req, res, next) => {
         }
         if (req_path === IndexHtml) {
             return res.send(
-                getFormattedIndexFile(file_data, "LivePollApp",
-                    "Create custom online poll(s) with Live poll App for Free,And share your link to make people participate in poll.Create your poll in seconds. Ask a question, choose answers and share the link. Simple & Easy.",
-                    req.headers.host
-                )
+                getFormattedIndexFile(file_data, "LivePollApp", "Create custom online poll(s) with Live poll App for Free,And share your link to make people participate in poll.Create your poll in seconds. Ask a question, choose answers and share the link. Simple & Easy.", req.headers.host)
             )
         }
         return res.sendFile(filePath);
