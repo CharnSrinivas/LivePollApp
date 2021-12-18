@@ -41,6 +41,7 @@
     "build:view": "react-scripts build && cp -R build dist/build && rm -r build", 
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "postinstall":"npm run build:server && npm run build:view",
     "start":"node dist/server/index.js",
     "dev-view":"react-scripts start",
     "dev-server":"nodemon server/index.ts"
