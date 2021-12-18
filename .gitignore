@@ -4,7 +4,7 @@ server/node_modules
 
 view/build
 server/dist
-# view/dist
+view/dist
 
 # server/.env
 # view/.env
