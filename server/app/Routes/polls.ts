@@ -87,7 +87,7 @@ router.get(
             res.json({ msg: 'Invalid query parameters 1!' });
             return;
         }
-        /*
+        
         try {
             if (ip_addr) {
                 let is_already_voted = await mongo.isVotedToPoll(query_parms.question_id as string, ip_addr);
@@ -97,7 +97,7 @@ router.get(
             }
         } catch (error) {
             res.statusCode = 500; res.json({ error: true,msg:error }).end()
-        }*/
+        }
         //? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         let option_index = parseInt(query_parms.option_index as string);
 
