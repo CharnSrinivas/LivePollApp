@@ -141,7 +141,7 @@ app.get('/create', (req, res, next) => {
 app.get('/vote', (req, res, next) => {
 
     var req_path = req.originalUrl;
-    if (req_path.split('?') .length != 0 && req_path.split('?')[0] === '/vote') {
+    if (req_path.split('?').length != 0 && req_path.split('?')[0] === '/vote') {
         req_path = IndexHtml;
     }
     const filePath = path.resolve(__dirname, `../build${req_path}`)
@@ -152,7 +152,10 @@ app.get('/vote', (req, res, next) => {
             return res.status(500).send("<h2>Opps! Something went wrong </h2>").end();
         }
         if (req_path === IndexHtml) {
-            return res.send(file_data)
+
+            return res.send(
+                getFormattedIndexFile(file_data, "Vote | LivePollApp", "Create and vote poll(s) with Live poll App for Free.Simple easy and secure.", req.headers.host)
+            )
         }
         return res.sendFile(filePath);
     })
