@@ -1,4 +1,4 @@
-import express from 'express';
+import express ,{Request,Response} from 'express';
 import * as fs from 'fs';
 import path from 'path';
 import { hostname } from 'os'
@@ -14,16 +14,16 @@ const OgImage = "%%OG_IMAGE%%";
 
 const LogoPath = '/media/images/Logo.png'
 
-const getFormattedIndexFile =
-    (file_data: string, title: string, description: string, host?: string, og_image?: string, og_title?: string, og_description?: string) => {
-        return file_data.replace(PageTitle, 'LivePollApp')
-            .replace(PageDescription,
-                "Create custom online poll(s) with Live poll App for Free,And share your link to make people participate in poll.Create your poll in seconds. Ask a question, choose answers and share the link. Simple & Easy.")
-            .replace(OgTitle, og_title ?? title)
-            .replace(OgDescription, og_description ?? description)
-            .replace(OgImage, og_image ? og_image : "https://" + host + LogoPath)
-    }
-app.get('/', (req, res, next) => {
+const getFormattedIndexFile = (file_data: string, title: string, description: string, host?: string, og_image?: string, og_title?: string, og_description?: string) => {
+    return file_data.replace(PageTitle, 'LivePollApp')
+        .replace(PageDescription,
+            "Create custom online poll(s) with Live poll App for Free,And share your link to make people participate in poll.Create your poll in seconds. Ask a question, choose answers and share the link. Simple & Easy.")
+        .replace(OgTitle, og_title ?? title)
+        .replace(OgDescription, og_description ?? description)
+        .replace(OgImage, og_image ? og_image : "https://" + host + LogoPath)
+}
+
+const indexRoute = (req: Request, res: Response) => {
 
     var req_path = req.originalUrl;
     if (req_path == '/') {
@@ -43,7 +43,10 @@ app.get('/', (req, res, next) => {
         }
         return res.sendFile(filePath);
     })
-})
+}
+
+app.get('/', indexRoute)
+app.get('/home',indexRoute)
 
 app.get('/dashboard', (req, res, next) => {
 
