@@ -27,6 +27,7 @@
     "date-fns": "^2.26.0",
     "express": "^4.17.1",
     "ignore-styles": "^5.0.1",
+    "pm2": "^5.1.2",
     "react": "^17.0.2",
     "react-chartjs-2": "^4.0.0",
     "react-dom": "^17.0.2",
@@ -38,13 +39,13 @@
   },
   "scripts": {
     "build:server": "cd server && tsc ",
-    "build:view": "react-scripts build && cp -R build dist/build && rm -r build", 
+    "build:view": "react-scripts build && cp -R build dist/build && rm -r build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postinstall":"npm run build:server && npm run build:view",
-    "start":"node dist/server/index.js",
-    "dev-view":"react-scripts start",
-    "dev-server":"nodemon server/index.ts"
+    "postinstall": "npm run build:server && npm run build:view",
+    "start": "pm2 start dist/server/index.js && pm2 monit",
+    "dev-view": "react-scripts start",
+    "dev-server": "nodemon server/index.ts"
   },
   "eslintConfig": {
     "extends": [

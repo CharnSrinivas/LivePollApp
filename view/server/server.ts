@@ -29,7 +29,7 @@ app.get('/', (req, res, next) => {
     if (req_path == '/') {
         req_path = IndexHtml;
     }
-    console.log(req.headers.host);
+
     const filePath = path.resolve(__dirname, `../build${req_path}`)
     fs.readFile(filePath, 'utf8', (err, file_data) => {
         if (err) {
@@ -52,8 +52,6 @@ app.get('/dashboard', (req, res, next) => {
         req_path = IndexHtml;
     }
     const filePath = path.resolve(__dirname, `../build${req_path}`)
-    console.log(req.headers);
-
     fs.readFile(filePath, 'utf8', (err, file_data) => {
         if (err) {
             console.error(err);
@@ -129,14 +127,10 @@ app.get('/create', (req, res, next) => {
             return res.status(500).send("<h2>Opps! Something went wrong </h2>").end();
         }
         if (req_path === IndexHtml) {
+
             return res.send(
-                file_data
-                    .replace(PageTitle, "Create Poll| LivepollApp")
-                    .replace(PageDescription, "Create you poll in seconds and share it to everyone.Simple and Easy.")
-                    .replace(OgTitle, "Create Poll| LivepollApp")
-                    .replace(OgDescription, "Create you poll in seconds and share it to everyone.Simple and Easy.")
-                    .replace(OgImage, "https://" + req.headers.host + LogoPath)
-            )
+                getFormattedIndexFile(file_data, "Create Poll | LivePollApp", "Create and vote poll(s) with Live poll App for Free.Simple easy and secure.", req.headers.host)
+            );
         }
         return res.sendFile(filePath);
     })
@@ -147,7 +141,7 @@ app.get('/create', (req, res, next) => {
 app.get('/vote', (req, res, next) => {
 
     var req_path = req.originalUrl;
-    if (req_path == '/vote') {
+    if (req_path.split('?') .length != 0 && req_path.split('?')[0] === '/vote') {
         req_path = IndexHtml;
     }
     const filePath = path.resolve(__dirname, `../build${req_path}`)
